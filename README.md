@@ -6,4 +6,5 @@ https://www.rcgroups.com/forums/showthread.php?1473207-Diy-osd-(Arduino-and-open
 
 ## Specification
 MCU: Silicon Lab EFM8BB21f16G_A_QFN20
+
 IDE: uVision Keil (C51 Lab)
