@@ -70,7 +70,7 @@ void Show_Voltage(int value,char buff[])
 {
 		buff[0] = value/100;
 		buff[1] = value%100/10;
-	  buff[2] = value%100%10;
+		buff[2] = value%100%10;
 }
 /*
 //BB21ADC读取
