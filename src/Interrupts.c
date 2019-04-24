@@ -12,6 +12,8 @@ extern unsigned char lock;
 unsigned char voltage[] = {'V','O','L'};
 unsigned char VOT_value[5] = {0,0,0};
 
+unsigned char lockText[] = {'L','O','C','K'};
+
 unsigned char timeText[] = {'T','I','M','E'};
 //unsigned char time[4]={0,1,2,3};
 
@@ -78,7 +80,31 @@ SI_INTERRUPT (INT0_ISR, INT0_IRQn)
 					OSD_OUT(LargeNumbers[320+(2*temp)+1]);
 			}
 			
-			if(230 < line && line < 239)                              //判断到啊210行
+			
+			if(200 < line && line < 209)                              //判断到啊200行
+			{	
+				  /*lock显示*/
+					temp = line - 201; 
+					
+				if(lock == 0x00)    /*检测到飞控未解锁*/
+				{
+					buffer[0]=(lockText[0])<<3; 	
+					buffer[1]=(lockText[1])<<3; 	
+					buffer[2]=(lockText[2])<<3; 	
+					buffer[3]=(lockText[3])<<3;	
+					buffer[4]=(lockText[4])<<3;	
+				
+					delay(57);
+					OSD_OUT(letters[(buffer[0])+(temp)]);
+					OSD_OUT(letters[(buffer[1])+(temp)]);
+					OSD_OUT(letters[(buffer[2])+(temp)]);		
+					OSD_OUT(letters[(buffer[3])+(temp)]);
+					
+				}	
+				
+			}
+			
+			if(230 < line && line < 239)                              //判断到啊230行
 			{
 				
 				  /*电压字符和时间字符显示*/
@@ -96,10 +122,7 @@ SI_INTERRUPT (INT0_ISR, INT0_IRQn)
 					OSD_OUT(letters[(buffer[0])+(temp)]);
 					OSD_OUT(letters[(buffer[1])+(temp)]);
 					OSD_OUT(letters[(buffer[2])+(temp)]);	
-					OSD_OUT(letters[(buffer[3])+(temp)]);
-					OSD_OUT(letters[(buffer[4])+(temp)]);
-					OSD_OUT(letters[(buffer[5])+(temp)]);		
-					OSD_OUT(letters[(buffer[6])+(temp)]);	
+
 					delay(83);
 					OSD_OUT(letters[(buffer[7])+(temp)]);
 					OSD_OUT(letters[(buffer[8])+(temp)]);
@@ -108,7 +131,7 @@ SI_INTERRUPT (INT0_ISR, INT0_IRQn)
 			}
 		
 			
-			if(240 < line && line < 249)                      //判断到达220行
+			if(240 < line && line < 249)                      //判断到达240行
 			{
 				  /*电压数值 和 时间值显示  VOT_value数值来源于飞控通过SPI传输*/
 					temp = line - 241;
