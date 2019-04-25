@@ -8,14 +8,18 @@ int flag = 0;
 int temp =0;
 
 extern unsigned char lock;
+extern unsigned char flymode;
+
 
 unsigned char voltage[] = {'V','O','L'};
 unsigned char VOT_value[5] = {0,0,0};
 
 unsigned char lockText[] = {'L','O','C','K'};
 
+unsigned char flymodeText[] = {'A','C','R','0','N','G','L','E','H','I','Z'};
+
+
 unsigned char timeText[] = {'T','I','M','E'};
-//unsigned char time[4]={0,1,2,3};
 
 unsigned char buffer[20];
 unsigned int buffer1[10];
@@ -81,10 +85,64 @@ SI_INTERRUPT (INT0_ISR, INT0_IRQn)
 			}
 			
 			
-			if(200 < line && line < 209)                              //判断到啊200行
+			if(200 < line && line < 209)    //判断到啊200行
+			{	
+				  /*飞行模式显示*/
+					temp = line - 201; 
+				if(flymode == 0x00)    //flymodeText[] = {'A','C','R','0','N','G','L','E','H','I','Z'};
+				{
+					buffer[0]=(flymodeText[0])<<3; 	
+					buffer[1]=(flymodeText[4])<<3; 	
+					buffer[2]=(flymodeText[5])<<3; 	
+					buffer[3]=(flymodeText[6])<<3;	
+					buffer[4]=(flymodeText[7])<<3;	
+					
+					delay(93);
+					OSD_OUT(letters[(buffer[0])+(temp)]);
+					OSD_OUT(letters[(buffer[1])+(temp)]);
+					OSD_OUT(letters[(buffer[2])+(temp)]);		
+					OSD_OUT(letters[(buffer[3])+(temp)]);
+					OSD_OUT(letters[(buffer[4])+(temp)]);
+					
+				}else if(flymode == 0x01)    /*检测到手动模式*/
+				{
+					buffer[0]=(flymodeText[0])<<3; 	
+					buffer[1]=(flymodeText[1])<<3; 	
+					buffer[2]=(flymodeText[2])<<3; 	
+					buffer[3]=(flymodeText[3])<<3;	
+
+					delay(93);
+					OSD_OUT(letters[(buffer[0])+(temp)]);
+					OSD_OUT(letters[(buffer[1])+(temp)]);
+					OSD_OUT(letters[(buffer[2])+(temp)]);		
+					OSD_OUT(letters[(buffer[3])+(temp)]);
+					
+				}
+//				else{
+//					buffer[0]=(flymodeText[8])<<3; 	
+//					buffer[1]=(flymodeText[3])<<3; 	
+//					buffer[2]=(flymodeText[2])<<3; 	
+//					buffer[3]=(flymodeText[9])<<3;	
+//					buffer[4]=(flymodeText[10])<<3;	
+//					buffer[5]=(flymodeText[3])<<3;	
+//					buffer[6]=(flymodeText[4])<<3;	
+//					
+//					delay(87);
+//					OSD_OUT(letters[(buffer[0])+(temp)]);
+//					OSD_OUT(letters[(buffer[1])+(temp)]);
+//					OSD_OUT(letters[(buffer[2])+(temp)]);		
+//					OSD_OUT(letters[(buffer[3])+(temp)]);
+//					OSD_OUT(letters[(buffer[4])+(temp)]);
+//					OSD_OUT(letters[(buffer[5])+(temp)]);
+//					OSD_OUT(letters[(buffer[6])+(temp)]);	
+//				}	
+				
+			}
+			
+			if(210 < line && line < 219)    //判断到啊200行
 			{	
 				  /*lock显示*/
-					temp = line - 201; 
+					temp = line - 211; 
 					
 				if(lock == 0x00)    /*检测到飞控未解锁*/
 				{
@@ -101,8 +159,8 @@ SI_INTERRUPT (INT0_ISR, INT0_IRQn)
 					OSD_OUT(letters[(buffer[3])+(temp)]);
 					
 				}	
-				
 			}
+			
 			
 			if(230 < line && line < 239)                              //判断到啊230行
 			{
@@ -123,7 +181,7 @@ SI_INTERRUPT (INT0_ISR, INT0_IRQn)
 					OSD_OUT(letters[(buffer[1])+(temp)]);
 					OSD_OUT(letters[(buffer[2])+(temp)]);	
 
-					delay(83);
+					delay(93);
 					OSD_OUT(letters[(buffer[7])+(temp)]);
 					OSD_OUT(letters[(buffer[8])+(temp)]);
 					OSD_OUT(letters[(buffer[9])+(temp)]);
