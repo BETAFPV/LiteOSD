@@ -49,8 +49,11 @@ SI_SBIT (LED_GREEN, SFR_P1, 4);           // green LED
 //	return c;
 //}
 //unsigned int mV;
+
 unsigned int V;
 unsigned char lock;
+unsigned char flymode;
+
 extern unsigned char VOT_value[];
 extern unsigned char min_text[2];
 extern unsigned char sec_text[2];
@@ -126,12 +129,17 @@ void main (void)
 			{
 					if(OSD_Data[0] == 1)        //电压数据
 					{
-							V = (OSD_Data[1] << 8) + OSD_Data[2];
+						V = (OSD_Data[1] << 8) + OSD_Data[2];
 					}
-					
+
 					if(OSD_Data[0] == 2)        //解锁标志
 					{
-							lock = (OSD_Data[1] << 8) + OSD_Data[2];
+						lock = (OSD_Data[1] << 8) + OSD_Data[2];
+					}
+
+					if(OSD_Data[0] == 3)        //获取飞行模式标志
+					{
+						flymode = (OSD_Data[1] << 8) + OSD_Data[2];
 					}
 			}
 			//Get_voltage();
