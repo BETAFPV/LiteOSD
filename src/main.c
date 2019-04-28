@@ -53,7 +53,6 @@ SI_SBIT (LED_GREEN, SFR_P1, 4);           // green LED
 unsigned int V;
 unsigned char lock;
 unsigned char flymode;
-unsigned char HORIZON;
 
 extern unsigned char VOT_value[];
 extern unsigned char min_text[2];
@@ -66,7 +65,7 @@ unsigned char OSD_Data[4]={0};
 void Show_time(unsigned char dat,char buff[])
 {
 		buff[0] = dat/10;
-	   buff[1] = dat%10;
+	  buff[1] = dat%10;
 }
 
 /*显示电压到屏幕*/
@@ -140,17 +139,12 @@ void main (void)
 
 					if(OSD_Data[0] == 3)        //获取飞行模式标志
 					{
-						HORIZON = (OSD_Data[1] << 8) + OSD_Data[2];
-					}
-					
-					if(OSD_Data[0] == 4)        //获取飞行模式标志
-					{
 						flymode = (OSD_Data[1] << 8) + OSD_Data[2];
 					}
 			}
 			//Get_voltage();
-			Show_Voltage(V,VOT_value);
-		    Show_time(second,sec_text);
+				Show_Voltage(V,VOT_value);
+		  Show_time(second,sec_text);
 			Show_time(minute,min_text);
    }
 }

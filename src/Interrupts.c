@@ -9,9 +9,7 @@ int temp =0;
 
 extern unsigned char lock;
 extern unsigned char flymode;
-extern unsigned char HORIZON;
 
-unsigned char LiteText[] = {'L','I','T','E','S'};
 
 unsigned char voltage[] = {'V','O','L'};
 unsigned char VOT_value[5] = {0,0,0};
@@ -90,9 +88,8 @@ SI_INTERRUPT (INT0_ISR, INT0_IRQn)
 			if(200 < line && line < 209)    //判断到啊200行
 			{	
 				  /*飞行模式显示*/
-				 //flymodeText[] = {'A','C','R','0','N','G','L','E','H','I','Z'};
 					temp = line - 201; 
-				if( flymode == 0x00 && HORIZON == 0x00 )   //自稳模式
+				if(flymode == 0x00)    //flymodeText[] = {'A','C','R','0','N','G','L','E','H','I','Z'};
 				{
 					buffer[0]=(flymodeText[0])<<3; 	
 					buffer[1]=(flymodeText[4])<<3; 	
@@ -100,44 +97,45 @@ SI_INTERRUPT (INT0_ISR, INT0_IRQn)
 					buffer[3]=(flymodeText[6])<<3;	
 					buffer[4]=(flymodeText[7])<<3;	
 					
-					delay(106);
+					delay(93);
 					OSD_OUT(letters[(buffer[0])+(temp)]);
 					OSD_OUT(letters[(buffer[1])+(temp)]);
 					OSD_OUT(letters[(buffer[2])+(temp)]);		
 					OSD_OUT(letters[(buffer[3])+(temp)]);
 					OSD_OUT(letters[(buffer[4])+(temp)]);
 					
-				}else if( flymode == 0x01 && HORIZON== 0x00 )    //手动模式
+				}else if(flymode == 0x01)    /*检测到手动模式*/
 				{
 					buffer[0]=(flymodeText[0])<<3; 	
 					buffer[1]=(flymodeText[1])<<3; 	
 					buffer[2]=(flymodeText[2])<<3; 	
 					buffer[3]=(flymodeText[3])<<3;	
 
-					delay(106);
+					delay(93);
 					OSD_OUT(letters[(buffer[0])+(temp)]);
 					OSD_OUT(letters[(buffer[1])+(temp)]);
 					OSD_OUT(letters[(buffer[2])+(temp)]);		
 					OSD_OUT(letters[(buffer[3])+(temp)]);
-				}
-				else if( HORIZON == 0x01 ){						//半自稳模式
-					buffer[0]=(flymodeText[8])<<3; 	
-					buffer[1]=(flymodeText[3])<<3; 	
-					buffer[2]=(flymodeText[2])<<3; 
-					buffer[3]=(flymodeText[9])<<3;	
-					buffer[4]=(flymodeText[10])<<3;	
-					buffer[5]=(flymodeText[3])<<3;	
-					buffer[6]=(flymodeText[4])<<3;	
 					
-					delay(103);
-					OSD_OUT(letters[(buffer[0])+(temp)]);
-					OSD_OUT(letters[(buffer[1])+(temp)]);
-					OSD_OUT(letters[(buffer[2])+(temp)]);		
-					OSD_OUT(letters[(buffer[3])+(temp)]);
-					OSD_OUT(letters[(buffer[4])+(temp)]);
-					OSD_OUT(letters[(buffer[5])+(temp)]);
-					OSD_OUT(letters[(buffer[6])+(temp)]);	
-				}	
+				}
+//				else{
+//					buffer[0]=(flymodeText[8])<<3; 	
+//					buffer[1]=(flymodeText[3])<<3; 	
+//					buffer[2]=(flymodeText[2])<<3; 	
+//					buffer[3]=(flymodeText[9])<<3;	
+//					buffer[4]=(flymodeText[10])<<3;	
+//					buffer[5]=(flymodeText[3])<<3;	
+//					buffer[6]=(flymodeText[4])<<3;	
+//					
+//					delay(87);
+//					OSD_OUT(letters[(buffer[0])+(temp)]);
+//					OSD_OUT(letters[(buffer[1])+(temp)]);
+//					OSD_OUT(letters[(buffer[2])+(temp)]);		
+//					OSD_OUT(letters[(buffer[3])+(temp)]);
+//					OSD_OUT(letters[(buffer[4])+(temp)]);
+//					OSD_OUT(letters[(buffer[5])+(temp)]);
+//					OSD_OUT(letters[(buffer[6])+(temp)]);	
+//				}	
 				
 			}
 			
@@ -162,28 +160,6 @@ SI_INTERRUPT (INT0_ISR, INT0_IRQn)
 					
 				}	
 			}
-			if(220 < line && line < 229)    //判断到啊200行
-			{	
-					temp = line - 221; 				
-				if(lock == 0x00)    /*检测到飞控未解锁*/
-				{
-					/*Lite 2S显示*/
-					buffer[11]=(LiteText[0])<<3;
-					buffer[12]=(LiteText[1])<<3;   
-					buffer[13]=(LiteText[2])<<3; 	
-					buffer[14]=(LiteText[3])<<3; 	
-					buffer[15]=(LiteText[4])<<3; 
-
-					delay(53);
-					OSD_OUT(letters[(buffer[11])+(temp)]);
-					OSD_OUT(letters[(buffer[12])+(temp)]);
-					OSD_OUT(letters[(buffer[13])+(temp)]);
-					OSD_OUT(letters[(buffer[14])+(temp)]);
-					delay(2);
-					OSD_OUT(numbers[16+(temp)]);
-					OSD_OUT(letters[(buffer[15])+(temp)]);	
-				}	
-			}
 			
 			
 			if(230 < line && line < 239)                              //判断到啊230行
@@ -198,13 +174,13 @@ SI_INTERRUPT (INT0_ISR, INT0_IRQn)
 					buffer[7]=(timeText[0])<<3; 	
 					buffer[8]=(timeText[1])<<3; 	
 					buffer[9]=(timeText[2])<<3; 	
-					buffer[10]=(timeText[3])<<3; 
-					
+					buffer[10]=(timeText[3])<<3; 	
+				
 					delay(3);
 					OSD_OUT(letters[(buffer[0])+(temp)]);
 					OSD_OUT(letters[(buffer[1])+(temp)]);
 					OSD_OUT(letters[(buffer[2])+(temp)]);	
-					
+
 					delay(93);
 					OSD_OUT(letters[(buffer[7])+(temp)]);
 					OSD_OUT(letters[(buffer[8])+(temp)]);
