@@ -65,16 +65,16 @@ unsigned char OSD_Data[4]={0};
 /*显示时间到屏幕*/
 void Show_time(unsigned char dat,char buff[])
 {
-		buff[0] = dat/10;
-	   buff[1] = dat%10;
+	buff[0] = dat/10;
+	buff[1] = dat%10;
 }
 
 /*显示电压到屏幕*/
 void Show_Voltage(int value,char buff[])
 {
-		buff[0] = value/100;
-		buff[1] = value%100/10;
-		buff[2] = value%100%10;
+	buff[0] = value/100;
+	buff[1] = value%100/10;
+	buff[2] = value%100%10;
 }
 /*
 //BB21ADC读取
@@ -125,32 +125,32 @@ void main (void)
 	 P1MDOUT |= P1MDOUT_B5__OPEN_DRAIN;
    while (1)
    {
-			Read_Data(OSD_Data,4);          //读取飞控要显示再OSD的数据
-		  if(OSD_Data[3] == OSD_checksum(OSD_Data))
+		Read_Data(OSD_Data,4);          //读取飞控要显示再OSD的数据
+		if(OSD_Data[3] == OSD_checksum(OSD_Data))
+		 {
+			if(OSD_Data[0] == 1)        //电压数据
 			{
-					if(OSD_Data[0] == 1)        //电压数据
-					{
-						V = (OSD_Data[1] << 8) + OSD_Data[2];
-					}
-
-					if(OSD_Data[0] == 2)        //解锁标志
-					{
-						lock = (OSD_Data[1] << 8) + OSD_Data[2];
-					}
-
-					if(OSD_Data[0] == 3)        //获取飞行模式标志
-					{
-						HORIZON = (OSD_Data[1] << 8) + OSD_Data[2];
-					}
-					
-					if(OSD_Data[0] == 4)        //获取飞行模式标志
-					{
-						flymode = (OSD_Data[1] << 8) + OSD_Data[2];
-					}
+				V = (OSD_Data[1] << 8) + OSD_Data[2];
 			}
-			//Get_voltage();
-			Show_Voltage(V,VOT_value);
-		    Show_time(second,sec_text);
-			Show_time(minute,min_text);
+
+			if(OSD_Data[0] == 2)        //解锁标志
+			{
+				lock = (OSD_Data[1] << 8) + OSD_Data[2];
+			}
+
+			if(OSD_Data[0] == 3)        //获取飞行模式标志
+			{
+				HORIZON = (OSD_Data[1] << 8) + OSD_Data[2];
+			}
+			
+			if(OSD_Data[0] == 4)        //获取飞行模式标志
+			{
+				flymode = (OSD_Data[1] << 8) + OSD_Data[2];
+			}
+		}
+	 //Get_voltage();
+	 Show_Voltage(V,VOT_value);
+	 Show_time(second,sec_text);
+	 Show_time(minute,min_text);
    }
 }

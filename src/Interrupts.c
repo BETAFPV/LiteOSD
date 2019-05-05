@@ -18,7 +18,7 @@ unsigned char VOT_value[5] = {0,0,0};
 
 unsigned char lockText[] = {'L','O','C','K'};
 
-unsigned char flymodeText[] = {'A','C','R','0','N','G','L','E','H','I','Z'};
+unsigned char flymodeText[] = {'A','C','R','O','N','G','L','E','H','I','Z'};
 
 
 unsigned char timeText[] = {'T','I','M','E'};
@@ -57,195 +57,197 @@ SI_INTERRUPT (INT0_ISR, INT0_IRQn)
 			/*模拟分/秒*/
 			if(rising_count>=16129)         //使用视频的同步信号模拟一个粗虐延时 16129次中断大概时间为1S定时
 			{
-					rising_count = 0;
-					second+=1;
-					if(second >= 60)
+				rising_count = 0;
+				second+=1;
+				if(second >= 60)
+				{
+					second = 0;
+					minute++;
+					if(minute>=60)
 					{
-							second = 0;
-						  minute++;
-						  if(minute>=60)
-							{
-									minute = 0;
-							}
+						minute = 0;
 					}
+				}
 					
 			}
 		  flag = 1;
 	 }
 	 else 
 	 {
-		  if(((TH0<<8)|TL0)>490)
-  		{				
-				 line = 0;
-			}
-			if(130 < line && line < 147)
-			{
-					temp = line - 130;
-					delay(63);
-					OSD_OUT(LargeNumbers[320+(2*temp)]);
-					OSD_OUT(LargeNumbers[320+(2*temp)+1]);
-			}
-			
-			
-			if(200 < line && line < 209)    //判断到啊200行
-			{	
-				  /*飞行模式显示*/
-				 //flymodeText[] = {'A','C','R','0','N','G','L','E','H','I','Z'};
-					temp = line - 201; 
-				if( flymode == 0x00 && HORIZON == 0x00 )   //自稳模式
-				{
-					buffer[0]=(flymodeText[0])<<3; 	
-					buffer[1]=(flymodeText[4])<<3; 	
-					buffer[2]=(flymodeText[5])<<3; 	
-					buffer[3]=(flymodeText[6])<<3;	
-					buffer[4]=(flymodeText[7])<<3;	
-					
-					delay(106);
-					OSD_OUT(letters[(buffer[0])+(temp)]);
-					OSD_OUT(letters[(buffer[1])+(temp)]);
-					OSD_OUT(letters[(buffer[2])+(temp)]);		
-					OSD_OUT(letters[(buffer[3])+(temp)]);
-					OSD_OUT(letters[(buffer[4])+(temp)]);
-					
-				}else if( flymode == 0x01 && HORIZON== 0x00 )    //手动模式
-				{
-					buffer[0]=(flymodeText[0])<<3; 	
-					buffer[1]=(flymodeText[1])<<3; 	
-					buffer[2]=(flymodeText[2])<<3; 	
-					buffer[3]=(flymodeText[3])<<3;	
+		if(((TH0<<8)|TL0)>290)
+		{				
+		  line = 0;
+		}
 
-					delay(106);
-					OSD_OUT(letters[(buffer[0])+(temp)]);
-					OSD_OUT(letters[(buffer[1])+(temp)]);
-					OSD_OUT(letters[(buffer[2])+(temp)]);		
-					OSD_OUT(letters[(buffer[3])+(temp)]);
-				}
-				else if( HORIZON == 0x01 ){						//半自稳模式
-					buffer[0]=(flymodeText[8])<<3; 	
-					buffer[1]=(flymodeText[3])<<3; 	
-					buffer[2]=(flymodeText[2])<<3; 
-					buffer[3]=(flymodeText[9])<<3;	
-					buffer[4]=(flymodeText[10])<<3;	
-					buffer[5]=(flymodeText[3])<<3;	
-					buffer[6]=(flymodeText[4])<<3;	
-					
-					delay(103);
-					OSD_OUT(letters[(buffer[0])+(temp)]);
-					OSD_OUT(letters[(buffer[1])+(temp)]);
-					OSD_OUT(letters[(buffer[2])+(temp)]);		
-					OSD_OUT(letters[(buffer[3])+(temp)]);
-					OSD_OUT(letters[(buffer[4])+(temp)]);
-					OSD_OUT(letters[(buffer[5])+(temp)]);
-					OSD_OUT(letters[(buffer[6])+(temp)]);	
-				}	
-				
-			}
-			
-			if(210 < line && line < 219)    //判断到啊200行
-			{	
-				  /*lock显示*/
-					temp = line - 211; 
-					
-				if(lock == 0x00)    /*检测到飞控未解锁*/
-				{
-					buffer[0]=(lockText[0])<<3; 	
-					buffer[1]=(lockText[1])<<3; 	
-					buffer[2]=(lockText[2])<<3; 	
-					buffer[3]=(lockText[3])<<3;	
-					buffer[4]=(lockText[4])<<3;	
-				
-					delay(57);
-					OSD_OUT(letters[(buffer[0])+(temp)]);
-					OSD_OUT(letters[(buffer[1])+(temp)]);
-					OSD_OUT(letters[(buffer[2])+(temp)]);		
-					OSD_OUT(letters[(buffer[3])+(temp)]);
-					
-				}	
-			}
-			if(220 < line && line < 229)    //判断到啊200行
-			{	
-					temp = line - 221; 				
-				if(lock == 0x00)    /*检测到飞控未解锁*/
-				{
-					/*Lite 2S显示*/
-					buffer[11]=(LiteText[0])<<3;
-					buffer[12]=(LiteText[1])<<3;   
-					buffer[13]=(LiteText[2])<<3; 	
-					buffer[14]=(LiteText[3])<<3; 	
-					buffer[15]=(LiteText[4])<<3; 
+		if(130 < line && line < 147)
+		{
+		  temp = line - 130;
+		  delay(63);
+		  OSD_OUT(LargeNumbers[320+(2*temp)]);
+		  OSD_OUT(LargeNumbers[320+(2*temp)+1]);
+		}
+	
+		if(200 < line && line < 209)    //判断到啊200行
+		{	
+			  /*飞行模式显示*/
+			temp = line - 201; 
 
-					delay(53);
-					OSD_OUT(letters[(buffer[11])+(temp)]);
-					OSD_OUT(letters[(buffer[12])+(temp)]);
-					OSD_OUT(letters[(buffer[13])+(temp)]);
-					OSD_OUT(letters[(buffer[14])+(temp)]);
-					delay(2);
-					OSD_OUT(numbers[16+(temp)]);
-					OSD_OUT(letters[(buffer[15])+(temp)]);	
-				}	
-			}
-			
-			
-			if(230 < line && line < 239)                              //判断到啊230行
+			//flymodeText[] = {'A','C','R','0','N','G','L','E','H','I','Z'};
+			if( flymode == 0x00 && HORIZON == 0x00 )   //自稳模式
 			{
+				buffer[0]=(flymodeText[0])<<3; 	
+				buffer[1]=(flymodeText[4])<<3; 	
+				buffer[2]=(flymodeText[5])<<3; 	
+				buffer[3]=(flymodeText[6])<<3;	
+				buffer[4]=(flymodeText[7])<<3;	
 				
-				  /*电压字符和时间字符显示*/
-					temp = line - 231;
-					buffer[0]=(voltage[0])<<3;
-					buffer[1]=(voltage[1])<<3;
-					buffer[2]=(voltage[2])<<3;   
-					
-					buffer[7]=(timeText[0])<<3; 	
-					buffer[8]=(timeText[1])<<3; 	
-					buffer[9]=(timeText[2])<<3; 	
-					buffer[10]=(timeText[3])<<3; 
-					
-					delay(3);
-					OSD_OUT(letters[(buffer[0])+(temp)]);
-					OSD_OUT(letters[(buffer[1])+(temp)]);
-					OSD_OUT(letters[(buffer[2])+(temp)]);	
-					
-					delay(93);
-					OSD_OUT(letters[(buffer[7])+(temp)]);
-					OSD_OUT(letters[(buffer[8])+(temp)]);
-					OSD_OUT(letters[(buffer[9])+(temp)]);
-					OSD_OUT(letters[(buffer[10])+(temp)]);
+				delay(104);
+				OSD_OUT(letters[(buffer[0])+(temp)]);
+				OSD_OUT(letters[(buffer[1])+(temp)]);
+				OSD_OUT(letters[(buffer[2])+(temp)]);		
+				OSD_OUT(letters[(buffer[3])+(temp)]);
+				OSD_OUT(letters[(buffer[4])+(temp)]);
+				
+			}else if( flymode == 0x01 && HORIZON== 0x00 )    //手动模式
+			{
+				buffer[0]=(flymodeText[0])<<3; 	
+				buffer[1]=(flymodeText[1])<<3; 	
+				buffer[2]=(flymodeText[2])<<3; 	
+				buffer[3]=(flymodeText[3])<<3;	
+
+				delay(104);
+				OSD_OUT(letters[(buffer[0])+(temp)]);
+				OSD_OUT(letters[(buffer[1])+(temp)]);
+				OSD_OUT(letters[(buffer[2])+(temp)]);		
+				OSD_OUT(letters[(buffer[3])+(temp)]);
 			}
+			else if( HORIZON == 0x01 ){						//半自稳模式
+				buffer[0]=(flymodeText[8])<<3; 	
+				buffer[1]=(flymodeText[3])<<3; 	
+				buffer[2]=(flymodeText[2])<<3; 
+				buffer[3]=(flymodeText[9])<<3;	
+				buffer[4]=(flymodeText[10])<<3;	
+				buffer[5]=(flymodeText[3])<<3;	
+				buffer[6]=(flymodeText[4])<<3;	
+				
+				delay(101);
+				OSD_OUT(letters[(buffer[0])+(temp)]);
+				OSD_OUT(letters[(buffer[1])+(temp)]);
+				OSD_OUT(letters[(buffer[2])+(temp)]);		
+				OSD_OUT(letters[(buffer[3])+(temp)]);
+				OSD_OUT(letters[(buffer[4])+(temp)]);
+				OSD_OUT(letters[(buffer[5])+(temp)]);
+				OSD_OUT(letters[(buffer[6])+(temp)]);	
+			}	
+			
+		}
 		
-			
-			if(240 < line && line < 249)                      //判断到达240行
+		if(210 < line && line < 219)    //判断到啊200行
+		{	
+			  /*lock显示*/
+			temp = line - 211; 
+				
+			if(lock == 0x00)    /*检测到飞控未解锁*/
 			{
-				  /*电压数值 和 时间值显示  VOT_value数值来源于飞控通过SPI传输*/
-					temp = line - 241;
-					buffer1[0]=VOT_value[0]<<3; 
-					buffer1[1]=VOT_value[1]<<3; 
-					buffer1[2]=VOT_value[2]<<3; 
-				 /*min_text sec_text 数据来源于模拟时间*/
-					buffer1[3]=min_text[0]<<3; 
-				  buffer1[4]=min_text[1]<<3; 
-					buffer1[5]=sec_text[0]<<3; 
-					buffer1[6]=sec_text[1]<<3; 
-				
-					delay(0);				
-					OSD_OUT(numbers[(buffer1[0])+(temp)]);
-					OSD_OUT(numbers[88+(temp)]);
-					OSD_OUT(numbers[(buffer1[1])+(temp)]);
-					OSD_OUT(numbers[(buffer1[2])+(temp)]);
-				  
-				  delay(91);
-				  OSD_OUT(numbers[(buffer1[3])+(temp)]);
-					OSD_OUT(numbers[(buffer1[4])+(temp)]);
-				  OSD_OUT(numbers[104+(temp)]);
-					OSD_OUT(numbers[(buffer1[5])+(temp)]);
-				  OSD_OUT(numbers[(buffer1[6])+(temp)]);
-				
-
-			}
+				buffer[0]=(lockText[0])<<3; 	
+				buffer[1]=(lockText[1])<<3; 	
+				buffer[2]=(lockText[2])<<3; 	
+				buffer[3]=(lockText[3])<<3;	
+				buffer[4]=(lockText[4])<<3;	
 			
-			OSD_OUT(0x00);
-			line++;
-		  IT01CF = IT01CF_IN0PL__ACTIVE_HIGH | IT01CF_IN0SL__P0_2;                     //切换为上升沿中断触发
-		  flag = 0;
+				delay(57);
+				OSD_OUT(letters[(buffer[0])+(temp)]);
+				OSD_OUT(letters[(buffer[1])+(temp)]);
+				OSD_OUT(letters[(buffer[2])+(temp)]);		
+				OSD_OUT(letters[(buffer[3])+(temp)]);
+				
+			}	
+		}
+		if(220 < line && line < 229)    //判断到啊200行
+		{	
+			temp = line - 221; 	
+			
+			if(lock == 0x00)    /*检测到飞控未解锁*/
+			{
+				/*Lite 2S显示*/
+				buffer[11]=(LiteText[0])<<3;
+				buffer[12]=(LiteText[1])<<3;   
+				buffer[13]=(LiteText[2])<<3; 	
+				buffer[14]=(LiteText[3])<<3; 	
+				buffer[15]=(LiteText[4])<<3; 
+
+				delay(53);
+				OSD_OUT(letters[(buffer[11])+(temp)]);
+				OSD_OUT(letters[(buffer[12])+(temp)]);
+				OSD_OUT(letters[(buffer[13])+(temp)]);
+				OSD_OUT(letters[(buffer[14])+(temp)]);
+				delay(2);
+				OSD_OUT(numbers[16+(temp)]);
+				OSD_OUT(letters[(buffer[15])+(temp)]);	
+			}	
+		}
+		
+		
+		if(230 < line && line < 239)                              //判断到啊230行
+		{
+			
+		  /*电压字符和时间字符显示*/
+			temp = line - 231;
+			buffer[0]=(voltage[0])<<3;
+			buffer[1]=(voltage[1])<<3;
+			buffer[2]=(voltage[2])<<3;   
+			
+			buffer[7]=(timeText[0])<<3; 	
+			buffer[8]=(timeText[1])<<3; 	
+			buffer[9]=(timeText[2])<<3; 	
+			buffer[10]=(timeText[3])<<3; 
+			
+			delay(3);
+			OSD_OUT(letters[(buffer[0])+(temp)]);
+			OSD_OUT(letters[(buffer[1])+(temp)]);
+			OSD_OUT(letters[(buffer[2])+(temp)]);	
+			
+			delay(89);
+			OSD_OUT(letters[(buffer[7])+(temp)]);
+			OSD_OUT(letters[(buffer[8])+(temp)]);
+			OSD_OUT(letters[(buffer[9])+(temp)]);
+			OSD_OUT(letters[(buffer[10])+(temp)]);
+		}
+	
+		
+		if(240 < line && line < 249)                      //判断到达240行
+		{
+		  /*电压数值 和 时间值显示  VOT_value数值来源于飞控通过SPI传输*/
+			temp = line - 241;
+			buffer1[0]=VOT_value[0]<<3; 
+			buffer1[1]=VOT_value[1]<<3; 
+			buffer1[2]=VOT_value[2]<<3; 
+		 /*min_text sec_text 数据来源于模拟时间*/
+			buffer1[3]=min_text[0]<<3; 
+			buffer1[4]=min_text[1]<<3; 
+			buffer1[5]=sec_text[0]<<3; 
+			buffer1[6]=sec_text[1]<<3; 
+		
+			delay(0);				
+			OSD_OUT(numbers[(buffer1[0])+(temp)]);
+			OSD_OUT(numbers[88+(temp)]);
+			OSD_OUT(numbers[(buffer1[1])+(temp)]);
+			OSD_OUT(numbers[(buffer1[2])+(temp)]);
+		  
+			delay(87);
+			OSD_OUT(numbers[(buffer1[3])+(temp)]);
+			OSD_OUT(numbers[(buffer1[4])+(temp)]);
+			OSD_OUT(numbers[104+(temp)]);
+			OSD_OUT(numbers[(buffer1[5])+(temp)]);
+			OSD_OUT(numbers[(buffer1[6])+(temp)]);
+		
+
+		}
+			
+		OSD_OUT(0x00);
+		line++;
+		IT01CF = IT01CF_IN0PL__ACTIVE_HIGH | IT01CF_IN0SL__P0_2;                     //切换为上升沿中断触发
+		flag = 0;
 	 } 
 }
 
