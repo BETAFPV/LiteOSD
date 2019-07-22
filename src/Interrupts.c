@@ -636,7 +636,6 @@ SI_INTERRUPT (INT0_ISR, INT0_IRQn)
 								SPI0DAT = U_letters[_t+(temp)];
 						}
 					}
-
 			}
 			else//如果flight_window == 0 飞行界面
 			{
@@ -693,7 +692,6 @@ SI_INTERRUPT (INT0_ISR, INT0_IRQn)
 											}
 									}
 							}
-
 							if(210 < line && line < 219)
 							{
 									temp = line - 211;
@@ -799,9 +797,7 @@ SI_INTERRUPT (INT0_ISR, INT0_IRQn)
 											delay_us();
 											SPI0DAT =U_letters[_n+(temp)];
 									}
-
-							}
-							
+							}	
 							if(220 < line && line < 229)
 							{
 									temp = line - 221;
