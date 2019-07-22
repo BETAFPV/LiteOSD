@@ -7,7 +7,9 @@ void CLOCK_Init(void)
 	CLKSEL = 0x00;         //24.5MHz 
 	while(CLKSEL & 0x80 != 0x80);
 	for(i=0;i<1000;i++);   //等待时钟稳定
+
 	CLKSEL = 0x03;         //49MHz
+	HFO1CAL = 0x10;
 	while(CLKSEL & 0x80 != 0x80);
 }
 
@@ -27,7 +29,6 @@ void Timer0_Init()
 	TL0 = 0x00;
 	TH0 = 0x00;
 	TCON |= 0x10;  
-
 }
 
 
@@ -46,32 +47,3 @@ void SPI0_Init()
 	SPI0CFG |= 0x40;      
 	SPI0CN0 |= 0x01;
 }
-
-/*ADC 初始化*/
-void ADC_Init()
-{
-	XBR2 = 0x40;
-	XBR0 |=0x01;
-	
-	ADC0MX = 0x0E;	      //weifeng modify
-	
-	//ADC0CF = 0x09;
-	ADC0CF = 0x11;
-	ADC0PWR = 0x4F;
-	ADC0CN0 &= ~0x07;
-	ADC0CN0 |= 0x80;	
-}
-//void UART_Init()
-//{
-//	  uint8_t TCON_save = TCON;
-//		XBR2 = 0x40;
-//	  XBR0 = 0x01;
-//	  TCON &= 0x10 & 0x40;
-//	  TH1 = 0x96;
-//	  TCON = TCON_save;
-//	
-//	  CKCON0 = 0x08;
-//	  TMOD = 0x20;
-//	  TCON |= 0x40;
-//	  SCON0 |= 0x10;    
-//}
