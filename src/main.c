@@ -21,136 +21,143 @@
 #include "stdio.h"
 #include "InitDevice.h"
 #include "spi.h"
-SI_SBIT (LED_GREEN, SFR_P1, 4);           // green LED
-//extern int count;
-
-//void UART1_SendData(char dat)
-//{
-//	IE &= ~(1<<4);
-//	SBUF0 = dat;
-//	while(!(SCON0 & 1<<1));    //
-//	SCON0 &= ~(1<<1);          //
-//	IE |= (1<<4);
-//}
-
-////UART0  
-//void UART1_SendString(char *s)
-//{
-//	while(*s)   //
-//	{
-//		UART1_SendData(*s++);
-//	}
-//}
-
-
-//char putchar(char c)
-//{
-//	UART1_SendData(c);
-//	return c;
-//}
-//unsigned int mV;
 
 unsigned int V;
-unsigned char lock;
-unsigned char flymode;
-unsigned char HORIZON;
+extern unsigned char lock;
+extern unsigned char flymode;
 
-extern unsigned char VOT_value[];
+idata unsigned  int kp1;
+idata unsigned  int kp2;
+idata unsigned  int kp3;
+
+idata unsigned  int ki1;
+idata unsigned  int ki2;
+idata unsigned  int ki3;
+
+idata unsigned  int kd1;
+idata unsigned  int kd2;
+idata unsigned  int kd3;
+
+unsigned char m11;
+unsigned char m22;
+unsigned char m33;
+unsigned char m44;
+
+extern unsigned char m1;
+extern unsigned char m2;
+extern unsigned char m3;
+extern unsigned char m4;
+
+extern unsigned char VOT_value[3];
+extern unsigned char state_value[3];
+extern unsigned char   kp[9];
+extern unsigned char   ki[9];
+extern unsigned char   kd[9];
 extern unsigned char min_text[2];
 extern unsigned char sec_text[2];
 extern unsigned short minute,second;
-extern unsigned short rising_count;                        //记录上升沿次数
-unsigned char OSD_Data[4]={0};
+extern unsigned short rising_count;      //记录上升沿次数
+idata unsigned char OSD_Data[16]={0};
+extern void delay(int n);
+extern unsigned char flight_window;
+extern unsigned char index;
+extern unsigned char proto;
+extern unsigned char osd_class;
+unsigned char state = 0,proto_class = 0;
+
 
 /*显示时间到屏幕*/
 void Show_time(unsigned char dat,char buff[])
 {
-	buff[0] = dat/10;
-	buff[1] = dat%10;
+	buff[0] = (dat/10)  << 3;
+	buff[1] = (dat%10)  << 3;
 }
 
 /*显示电压到屏幕*/
 void Show_Voltage(int value,char buff[])
 {
-	buff[0] = value/100;
-	buff[1] = value%100/10;
-	buff[2] = value%100%10;
+	buff[0] = (value/100) << 3;
+	buff[1] = (value%100/10) << 3;
+	buff[2] = (value%100%10) << 3;
 }
-/*
-//BB21ADC读取
 
-void Get_voltage()
+/*显示pid到屏幕*/
+void Show_PID(int pid1,int pid2,int pid3,char buff[])
 {
-	 static uint32_t accumulator = 0;     // Accumulator for averaging
-   static uint16_t measurements = 2048; // Measurement counter
-   uint32_t result = 0;
-//   uint32_t mV;                       // Measured voltage in mV
-   uint8_t SFRPAGE_save;
-
-	 ADC0CN0 |= 0x01<<4;       //清除标志位
-   ADC0CN0_ADINT = 0;                   // Clear ADC0 conv. complete flag
-
-   accumulator += ADC0;
-   measurements--;
-
-   if(measurements == 0)
-   {
-	  measurements = 2048;
-	  result = accumulator / 2048;
-	  accumulator = 0;
-	  mV =  (result * 3300) / 1023;
-	  SFRPAGE_save = SFRPAGE;
-	  SFRPAGE = LEGACY_PAGE;
-		Show_Voltage(mV,VOT_value);
-	  SFRPAGE = SFRPAGE_save;
-   }
+	buff[0] = (pid1/100) << 3;
+	buff[1] = (pid1%100/10) << 3;
+	buff[2] = (pid1%100%10) << 3;
+	buff[3] = (pid2/100) << 3;
+	buff[4] = (pid2%100/10) << 3;
+	buff[5] = (pid2%100%10) << 3;
+	buff[6] = (pid3/100) << 3;
+	buff[7] = (pid3%100/10) << 3;
+	buff[8] = (pid3%100%10) << 3;
 }
-*/
-//int i;
+
+void Show_Moto(unsigned char state)
+{
+	flight_window = (state>>4) & 0x01;
+	lock = (state>>5) & 0x01;
+	flymode =(state>>6) & 0xf;
+	m1 = (state & 0x01) << 3;
+	m2 = ((state>>1) & 0x01) << 3;
+	m3 = ((state>>2) & 0x01) << 3;
+	m4 = ((state>>3) & 0x01) << 3;
+}
+
+
+void  Show_prot(unsigned char prot)
+{
+		osd_class = prot & 0x0f;
+		proto = prot >> 4;
+}
+
 void main (void)
 {
 	/*关闭看门狗*/
-	 WDTCN = 0xDE; //First key
-	 WDTCN = 0xAD; //Second key
+		WDTCN = 0xDE; //First key
+		WDTCN = 0xAD; //Second key
 	
-   CLOCK_Init();
-	 EX0_Init();
-   Timer0_Init();
-	 SPI0_Init();
-	 ADC_Init();
-   SCON0_TI = 1;                       // This STDIO library requires TI to
-	 IE_EA = 1;
-	 P1MDIN |= P1MDIN_B5__DIGITAL;
-	 P1SKIP |= P1SKIP_B5__NOT_SKIPPED;
-	 P1MDOUT |= P1MDOUT_B5__OPEN_DRAIN;
-   while (1)
-   {
-		Read_Data(OSD_Data,4);          //读取飞控要显示再OSD的数据
-		if(OSD_Data[3] == OSD_checksum(OSD_Data))
+		CLOCK_Init();
+		EX0_Init();
+		Timer0_Init();
+		SPI0_Init();
+		SCON0_TI = 1;                       // This STDIO library requires TI to
+		IE_EA = 1;
+		P1MDIN |= P1MDIN_B5__DIGITAL;
+		P1SKIP |= P1SKIP_B5__NOT_SKIPPED;
+		P1MDOUT |= P1MDOUT_B5__OPEN_DRAIN;
+
+		 while (1)
 		 {
-			if(OSD_Data[0] == 1)        //电压数据
-			{
-				V = (OSD_Data[1] << 8) + OSD_Data[2];
+				Read_Data(OSD_Data,16);          //读取飞控要显示再OSD的数据
+				if(OSD_Data[15] == OSD_checksum(OSD_Data))
+				{
+					if(OSD_Data[0] == 0x88)
+					{
+							V = (OSD_Data[1] << 8) + OSD_Data[2];
+							kp1 =  OSD_Data[3];
+							kp2 =  OSD_Data[4];
+							kp3 =  OSD_Data[5];
+							ki1 =  OSD_Data[6];
+							ki2 =  OSD_Data[7];
+							ki3 =  OSD_Data[8];
+							kd1 =  OSD_Data[9];
+							kd2 =  OSD_Data[10];
+							kd3 =  OSD_Data[11];	
+							state = OSD_Data[12];
+							proto_class = OSD_Data[13];
+							index = OSD_Data[14];
+					}
 			}
-
-			if(OSD_Data[0] == 2)        //解锁标志
-			{
-				lock = (OSD_Data[1] << 8) + OSD_Data[2];
-			}
-
-			if(OSD_Data[0] == 3)        //获取飞行模式标志
-			{
-				HORIZON = (OSD_Data[1] << 8) + OSD_Data[2];
-			}
-			
-			if(OSD_Data[0] == 4)        //获取飞行模式标志
-			{
-				flymode = (OSD_Data[1] << 8) + OSD_Data[2];
-			}
-		}
-	 //Get_voltage();
-	 Show_Voltage(V,VOT_value);
-	 Show_time(second,sec_text);
-	 Show_time(minute,min_text);
-   }
+			Show_PID(kp1,kp2,kp3,kp);
+			Show_PID(ki1,ki2,ki3,ki);
+			Show_PID(kd1,kd2,kd3,kd);
+			Show_Voltage(V,VOT_value);
+			Show_Moto(state);
+			Show_prot(proto_class);
+			Show_time(minute,min_text);
+			Show_time(second,sec_text);
+	}
 }
