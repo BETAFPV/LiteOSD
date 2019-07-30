@@ -40,7 +40,7 @@ unsigned char flight_window=0;  //0:flight   1:set memu window
 unsigned char osd_class=0;  // 0:main 1:pid  2:moto 3:save  4:exit
 unsigned char proto=1;
 unsigned char index=0;   
-
+unsigned char turtle=0; 
 unsigned short minute=0,second=0;
 unsigned char min_text[2];
 unsigned char sec_text[2];
@@ -1303,6 +1303,30 @@ SI_INTERRUPT (INT0_ISR, INT0_IRQn)
 													SPI0DAT =U_letters[_g+(temp)];
 											}
 									}
+							}
+							
+							if(185 < line && line < 195)
+							{
+									temp = line - 186;
+									if(lock == 0)
+									{
+										if(turtle)
+										{
+											delay(55);
+											SPI0DAT = U_letters[_t+(temp)];
+											delay_us();
+											SPI0DAT = U_letters[_u+(temp)];
+											delay_us();
+											SPI0DAT = U_letters[_r+(temp)];	
+											delay_us();
+											SPI0DAT = U_letters[_t+(temp)];
+											delay_us();
+											SPI0DAT = U_letters[_l+(temp)];
+											delay_us();
+											SPI0DAT = U_letters[ _e+(temp)];
+											delay_us();
+									}
+								}
 							}
 							if(210 < line && line < 219)
 							{

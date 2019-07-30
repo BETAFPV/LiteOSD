@@ -72,10 +72,11 @@ idata unsigned char OSD_Data[16]={0};
 extern void delay(int n);
 extern unsigned char flight_window;
 extern unsigned char index;
+extern unsigned char turtle;
 extern unsigned char proto;
 extern unsigned char osd_class;
-unsigned char state = 0,proto_class = 0;
-
+idata unsigned char state = 0,proto_class = 0;
+idata unsigned char index_turtle = 0;
 
 /*显示时间到屏幕*/
 void Show_time(unsigned char dat,char buff[])
@@ -124,7 +125,11 @@ void  Show_prot(unsigned char prot)
 		proto = prot >> 4;
 }
 
-
+void  Show_index(unsigned char index_turtle)
+{
+		index = index_turtle & (~0x80);
+		turtle = index_turtle >> 7;
+}
 
 void main (void)
 {
@@ -163,7 +168,7 @@ void main (void)
 							aetr_or_taer =  OSD_Data[11];
 							state = OSD_Data[12];
 							proto_class = OSD_Data[13];
-							index = OSD_Data[14];
+							index_turtle = OSD_Data[14];
 						}
 					}
 					else
@@ -183,7 +188,7 @@ void main (void)
 					
 							state = OSD_Data[12];
 							proto_class = OSD_Data[13];
-							index = OSD_Data[14];
+							index_turtle = OSD_Data[14];
 						}
 					}
 			}
@@ -196,5 +201,6 @@ void main (void)
 			Show_prot(proto_class);
 			Show_time(minute,min_text);
 			Show_time(second,sec_text);
+			Show_index(index_turtle);
 	}
 }
