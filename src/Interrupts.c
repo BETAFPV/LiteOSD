@@ -19,6 +19,17 @@ unsigned char  kp[9] = {0};
 unsigned char  ki[9] = {0};
 unsigned char  kd[9] = {0};
 
+unsigned char roll1;
+unsigned char pitch1;
+unsigned char yaw1;
+unsigned char throttle1;
+unsigned char aetr_or_taer;
+
+idata unsigned char ARMING;//ch5
+idata unsigned char LEVELMODE;//ch6
+idata unsigned char RACEMODE;//ch7
+idata unsigned char HORIZON;//ch8
+
 unsigned char VOT_value[3] = {0,0,0};
 unsigned char state_value[3] = {0,0,0};
 unsigned char moto_value[4] = {0,0,0,0};
@@ -99,9 +110,9 @@ SI_INTERRUPT (INT0_ISR, INT0_IRQn)
 			{
 				if(osd_class == 0)
 				{
-					if(100 < line && line < 109)
+					if(70 < line && line < 79)
 					{
-							temp = line - 101;
+							temp = line - 71;
 							delay(30);
 							SPI0DAT = numbers[80+(temp)];
 							delay_us();
@@ -115,9 +126,9 @@ SI_INTERRUPT (INT0_ISR, INT0_IRQn)
 							delay_us();
 							SPI0DAT = numbers[80+(temp)];
 					}
-					if(120 < line && line < 129)
+					if(90 < line && line < 99)
 					{
-							temp = line - 121;
+							temp = line - 91;
 							if (index == 0){
 								delay(36);
 								SPI0DAT = numbers[ 96+(temp)];
@@ -135,9 +146,9 @@ SI_INTERRUPT (INT0_ISR, INT0_IRQn)
 							delay(41);
 							SPI0DAT = numbers[ 96+(temp)];
 					}
-					if(135 < line && line < 145)
+					if(105 < line && line < 115)
 					{
-							temp = line - 136;
+							temp = line - 106;
 							if (index == 1){
 								delay(35);
 								SPI0DAT = numbers[ 96+(temp)];
@@ -157,9 +168,9 @@ SI_INTERRUPT (INT0_ISR, INT0_IRQn)
 							delay(39);
 							SPI0DAT = numbers[ 96+(temp)];
 					}
-					if(150 < line && line < 159)
+					if(120 < line && line < 129)
 					{
-							temp = line - 151;
+							temp = line - 121;
 							if (index == 2)
 							{
 									delay(34);
@@ -180,9 +191,9 @@ SI_INTERRUPT (INT0_ISR, INT0_IRQn)
 							delay_us();
 							SPI0DAT = U_letters[_e+(temp)];	
 					}
-					if(165 < line && line < 175)
+					if(135 < line && line < 145)
 					{
-							temp = line - 166;
+							temp = line - 136;
 							if (index == 3)
 							{
 									delay(33);
@@ -203,6 +214,607 @@ SI_INTERRUPT (INT0_ISR, INT0_IRQn)
 							delay_us();
 							SPI0DAT = U_letters[_t+(temp)];
 					}
+					
+					if(150 < line && line < 159)
+					{
+							temp = line - 151;
+							if (index == 4)
+							{
+									delay(33);
+									SPI0DAT = numbers[ 96+(temp)];
+									delay_us();
+							}
+							else
+							{
+									delay(35);
+							}
+							if(aetr_or_taer==0)
+							{
+							SPI0DAT = U_letters[0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[_a+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[_e+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[_t+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[_r+(temp)];
+							}else{
+							SPI0DAT = U_letters[0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[_t+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[_a+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[_e+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[_r+(temp)];
+							}
+					}
+					
+					if(180 < line && line < 189)
+					{
+							temp = line - 181;
+							delay(6);
+
+							SPI0DAT = U_letters[0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[_r+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[_o+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[_l+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[_l+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[0+(temp)];
+							delay_us();
+							SPI0DAT = numbers[104+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							if(roll1<10)
+							{
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+
+							}else if(roll1>10&&roll1<40){	
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+
+							}else if(roll1>40&&roll1<80){
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];	
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+
+							}else if(roll1>80&&roll1<120){
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							}else if(roll1>120&&roll1<160){
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();	
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];	
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							
+							}else if(roll1>160&&roll1<200){
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							}
+							
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							
+							delay(1);
+
+							SPI0DAT = U_letters[0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[_c+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[_h+(temp)];
+							delay_us();
+							SPI0DAT = numbers[40+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[0+(temp)];
+							delay_us();
+							SPI0DAT = numbers[104+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							if(ARMING == 0x01)
+							{
+								delay_us();
+								SPI0DAT = numbers[8+(temp)];
+							}else{
+								delay_us();
+								SPI0DAT = numbers[0+(temp)];
+							}
+					}
+					
+					if(195 < line && line < 205)
+					{
+							temp = line - 196;
+							delay(5);
+
+							SPI0DAT = U_letters[0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[_p+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[_i+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[_t+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[_c+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[_h+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[0+(temp)];
+							delay_us();
+							SPI0DAT = numbers[104+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							if(pitch1<10)
+							{
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+
+							}else if(pitch1>10&&pitch1<40){	
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+
+							}else if(pitch1>40&&pitch1<80){
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+								
+							}else if(pitch1>80&&pitch1<120){
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+
+							}else if(pitch1>120&&pitch1<160){
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();	
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+
+							}else if(pitch1>160&&pitch1<200){
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							}
+							
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							
+							delay(1);
+							
+							SPI0DAT = U_letters[0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[_c+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[_h+(temp)];
+							delay_us();
+							SPI0DAT = numbers[48+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[0+(temp)];
+							delay_us();
+							SPI0DAT = numbers[104+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							if(LEVELMODE == 0x01)
+							{
+								delay_us();
+								SPI0DAT = numbers[8+(temp)];
+							}else{
+								delay_us();
+								SPI0DAT = numbers[0+(temp)];
+							}
+					}
+					
+					if(210 < line && line < 219)
+					{
+							temp = line - 211;
+							delay(4);
+
+							SPI0DAT = U_letters[0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[_t+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[_h+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[_r+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[_o+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[_t+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[_t+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[_l+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[_e+(temp)];
+							delay_us();
+							SPI0DAT = numbers[104+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];		
+							if(throttle1<5)
+							{
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+
+							}else if(throttle1>5&&throttle1<20){	
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+								
+							}else if(throttle1>20&&throttle1<40){
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];	
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+								
+							}else if(throttle1>40&&throttle1<60){
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+					
+							}else if(throttle1>60&&throttle1<80){
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();	
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];		
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							
+							}else if(throttle1>80&&throttle1<100){
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							}
+							
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();	
+
+							delay(1);							
+
+							SPI0DAT = U_letters[0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[_c+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[_h+(temp)];
+							delay_us();
+							SPI0DAT = numbers[56+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[0+(temp)];
+							delay_us();
+							SPI0DAT = numbers[104+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							if(RACEMODE == 0x01)
+							{
+								delay_us();
+								SPI0DAT = numbers[8+(temp)];
+							}else{
+								delay_us();
+								SPI0DAT = numbers[0+(temp)];
+							}
+					}
+					
+					if(225 < line && line < 235)
+					{
+							temp = line - 226;
+							delay(3);
+						
+							SPI0DAT = U_letters[0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[_y+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[_a+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[_w+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[0+(temp)];
+							delay_us();
+							SPI0DAT = numbers[104+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							if(yaw1<10)
+							{
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+
+							}else if(yaw1>10&&yaw1<40){	
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+						
+							}else if(yaw1>40&&yaw1<80){
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];	
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+								
+							}else if(yaw1>80&&yaw1<120){
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+						
+							}else if(yaw1>120&&yaw1<160){
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();	
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];	
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+								
+							}else if(yaw1>160&&yaw1<200){
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[_black+(temp)];
+							delay_us();								
+							SPI0DAT = U_letters[_black+(temp)];
+							}	
+							
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							
+							delay(1);								
+
+							SPI0DAT = U_letters[0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[_c+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[_h+(temp)];
+							delay_us();
+							SPI0DAT = numbers[64+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[0+(temp)];
+							delay_us();
+							SPI0DAT = numbers[104+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							delay_us();
+							SPI0DAT = U_letters[ 0+(temp)];
+							if(HORIZON == 0x01)
+							{
+								delay_us();
+								SPI0DAT = numbers[8+(temp)];
+							}else{
+								delay_us();
+								SPI0DAT = numbers[0+(temp)];
+							}
+					}
+					
 				}
 				if(osd_class == 1)
 				{

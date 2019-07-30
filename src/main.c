@@ -38,10 +38,21 @@ idata unsigned  int kd1;
 idata unsigned  int kd2;
 idata unsigned  int kd3;
 
-unsigned char m11;
-unsigned char m22;
-unsigned char m33;
-unsigned char m44;
+extern unsigned char roll1;
+extern unsigned char pitch1;
+extern unsigned char yaw1;
+extern unsigned char throttle1;
+extern unsigned char aetr_or_taer;
+
+extern idata unsigned char ARMING;		//ch5
+extern idata unsigned char LEVELMODE;	//ch6
+extern idata unsigned char RACEMODE;	//ch7
+extern idata unsigned char HORIZON;		//ch8
+
+idata unsigned char m11;
+idata unsigned char m22;
+idata unsigned char m33;
+idata unsigned char m44;
 
 extern unsigned char m1;
 extern unsigned char m2;
@@ -113,6 +124,8 @@ void  Show_prot(unsigned char prot)
 		proto = prot >> 4;
 }
 
+
+
 void main (void)
 {
 	/*关闭看门狗*/
@@ -134,9 +147,30 @@ void main (void)
 				Read_Data(OSD_Data,16);          //读取飞控要显示再OSD的数据
 				if(OSD_Data[15] == OSD_checksum(OSD_Data))
 				{
-					if(OSD_Data[0] == 0x88)
-					{
+					if(osd_class == 0)
+						{
+						if(OSD_Data[0] == 0x88)
+						{
 							V = (OSD_Data[1] << 8) + OSD_Data[2];
+							roll1 =  OSD_Data[3];
+							pitch1 =  OSD_Data[4];
+							yaw1 =  OSD_Data[5];
+							throttle1 =  OSD_Data[6];
+							ARMING =  OSD_Data[7];
+							LEVELMODE =  OSD_Data[8];
+							RACEMODE =  OSD_Data[9];
+							HORIZON =  OSD_Data[10];
+							aetr_or_taer =  OSD_Data[11];
+							state = OSD_Data[12];
+							proto_class = OSD_Data[13];
+							index = OSD_Data[14];
+						}
+					}
+					else
+						{	if(OSD_Data[0] == 0x88)
+							{
+							V = (OSD_Data[1] << 8) + OSD_Data[2];
+
 							kp1 =  OSD_Data[3];
 							kp2 =  OSD_Data[4];
 							kp3 =  OSD_Data[5];
@@ -146,11 +180,14 @@ void main (void)
 							kd1 =  OSD_Data[9];
 							kd2 =  OSD_Data[10];
 							kd3 =  OSD_Data[11];	
+					
 							state = OSD_Data[12];
 							proto_class = OSD_Data[13];
 							index = OSD_Data[14];
+						}
 					}
 			}
+	
 			Show_PID(kp1,kp2,kp3,kp);
 			Show_PID(ki1,ki2,ki3,ki);
 			Show_PID(kd1,kd2,kd3,kd);
