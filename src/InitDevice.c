@@ -1,16 +1,19 @@
 #include <SI_EFM8BB2_Register_Enums.h>
 #include "InitDevice.h"
+        
 
 void CLOCK_Init(void) 
 {
-	int i=0;
-	CLKSEL = 0x00;         //24.5MHz 
-	while(CLKSEL & 0x80 != 0x80);
-	for(i=0;i<1000;i++);   //等待时钟稳定
+	SFRPAGE = 0x00;
+	PFE0CN = 0x30;
+	CLKSEL = CLKSEL_CLKSL__HFOSC0 | CLKSEL_CLKDIV__SYSCLK_DIV_1;
+	CLKSEL = CLKSEL_CLKSL__HFOSC0 | CLKSEL_CLKDIV__SYSCLK_DIV_1;
+	while(CLKSEL & CLKSEL_DIVRDY__BMASK == CLKSEL_DIVRDY__NOT_READY);
+	
 
-	CLKSEL = 0x03;         //49MHz
-	HFO1CAL = 0x10;
-	while(CLKSEL & 0x80 != 0x80);
+	CLKSEL = CLKSEL_CLKSL__HFOSC1 | 0x07;
+	CLKSEL = CLKSEL_CLKSL__HFOSC1| 0x07;
+	while(CLKSEL & CLKSEL_DIVRDY__BMASK == CLKSEL_DIVRDY__NOT_READY);
 }
 
 /*外部中断初始化*/
@@ -43,7 +46,9 @@ void SPI0_Init()
 	XBR2 = 0x40;
 	XBR0 = 0x02;        //SPI
 	
-	SPI0CKR = 0x02;       
-	SPI0CFG |= 0x40;      
-	SPI0CN0 |= 0x01;
+	//SPI0CKR = (0x17 << SPI0CKR_SPI0CKR__SHIFT);
+	SPI0CKR = 1;
+	
+	SPI0CFG |= SPI0CFG_MSTEN__MASTER_ENABLED;
+	SPI0CN0 |= SPI0CN0_SPIEN__ENABLED | SPI0CN0_NSSMD__4_WIRE_MASTER_NSS_HIGH;
 }
