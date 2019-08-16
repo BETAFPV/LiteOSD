@@ -176,7 +176,7 @@ void main (void)
 		 while (1)
 		 {	
 				Read_Data(OSD_Data,15); 
-				delay(500);
+				delay(250);
 				if((OSD_Data[0] & 0x0f) == 0x0f)
 				{
 					if(OSD_Data[14] == OSD_checksum(OSD_Data))
