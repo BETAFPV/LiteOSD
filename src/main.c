@@ -1,46 +1,72 @@
+// Resources:
+//   SYSCLK - 32.667 MHz HFOSC0 / 1
+//   UART0  - 115200 baud, 8-N-1
+//   Timer1 - UART0 clock source
+//   P0.4   - UART0 TX
+//   P0.5   - UART0 RX
+
+// Includes
+//-----------------------------------------------------------------------------
 #include <SI_EFM8BB2_Register_Enums.h>
-#include "stdio.h"
+#include "retargetserial.h"
 #include "InitDevice.h"
-#include "spi.h"
+
+//-----------------------------------------------------------------------------
+// Global Variables
+//-----------------------------------------------------------------------------
+// Variables in Interrupts.c
 
 unsigned short V;
-unsigned char OSD_Data[15]={0};
+unsigned char  min_text[2] = {0};
+unsigned char  sec_text[2] = {0};
+unsigned char  lock = 0;
+unsigned char  showcase = 5;
+unsigned char  VOT_value[3] = {0};
+unsigned char  flymode = 0;
+unsigned char  proto=1;
+unsigned char  index=0;
+unsigned char  m1 = 0;
+unsigned char  m2 = 0;
+unsigned char  m3 = 0;
+unsigned char  m4 = 0;
+unsigned char   kp[9] = {0};
+unsigned char   ki[9] = {0};
+unsigned char   kd[9] = {0};
+unsigned char   pry[4] = {0};
+unsigned char   chn[4] = {0};
+unsigned char  turtle=0;
+unsigned char  map=0;
+unsigned char  vtx_power =0;
+unsigned char  channel = 0;
+unsigned char freq = 0;
 
-extern unsigned char VOT_value[3];
-extern unsigned char minute;
-extern unsigned char second;
-extern unsigned char flymode;
-extern unsigned char proto;
-extern unsigned char index;
-extern unsigned char lock;
-extern unsigned char m1;
-extern unsigned char m2;
-extern unsigned char m3;
-extern unsigned char m4;
-extern unsigned char  kp[9];
-extern unsigned char  ki[9];
-extern unsigned char  kd[9];
-extern unsigned char showcase;
-extern unsigned char  pry[4];
-extern unsigned char  chn[4];
-extern unsigned char turtle;
-extern void delay(unsigned char n);
-extern unsigned char map;
+extern unsigned char UART_Buffer[15];
 
+
+uint8_t OSD_checksum(uint8_t UART_Buffer[])
+{
+		unsigned char i;
+		unsigned char sum = 0;
+     for (i = 0; i < 14;i++ )
+		{
+					sum += UART_Buffer[i];
+		}
+    return sum;
+}
 
 void flight_window_data()
 {
-		lock = (OSD_Data[0]>>4) & 0x01;
+		lock = (UART_Buffer[0]>>4) & 0x01;
 
-		V = (OSD_Data[1] << 8) + OSD_Data[2];
+		V = (UART_Buffer[1] << 8) + UART_Buffer[2];
 		VOT_value[0] = (V/100) << 3;
 		VOT_value[1] = (V%100/10) << 3;
 		VOT_value[2] = (V%100%10) << 3;
 
 
-		chn[1] = (OSD_Data[6] >>1) & 0x1;
-		chn[2] = (OSD_Data[6] >>2) & 0x1;;
-		chn[3] = (OSD_Data[6] >>3) & 0x1;;
+		chn[1] = (UART_Buffer[6] >>1) & 0x1;
+		chn[2] = (UART_Buffer[6] >>2) & 0x1;;
+		chn[3] = (UART_Buffer[6] >>3) & 0x1;;
 
 		if(chn[1])
 		{
@@ -76,78 +102,78 @@ void flight_window_data()
 		}
 
 
-		proto = (OSD_Data[0]>>6) & 0x3;
+		proto = (UART_Buffer[0]>>6) & 0x3;
 
-		turtle = (OSD_Data[4]>>6) & 0x3;
+		turtle = (UART_Buffer[4]>>6) & 0x3;
 }
 
 void set_window_data()
 {
-		index = OSD_Data[4] & 0xf;
+		index = UART_Buffer[4] & 0xf;
 }
 
 void pid_window_data()
 {
-		index = index = OSD_Data[4] & 0xf;
+		index = index = UART_Buffer[4] & 0xf;
 
-		kp[0] = (OSD_Data[5]/100) << 3;
-		kp[1] = (OSD_Data[5]%100/10) << 3;
-		kp[2] = (OSD_Data[5]%100%10) << 3;
-		kp[3] = (OSD_Data[6]/100) << 3;
-		kp[4] = (OSD_Data[6]%100/10) << 3;
-		kp[5] = (OSD_Data[6]%100%10) << 3;
-		kp[6] = (OSD_Data[7]/100) << 3;
-		kp[7] = (OSD_Data[7]%100/10) << 3;
-		kp[8] = (OSD_Data[7]%100%10) << 3;
+		kp[0] = (UART_Buffer[5]/100) << 3;
+		kp[1] = (UART_Buffer[5]%100/10) << 3;
+		kp[2] = (UART_Buffer[5]%100%10) << 3;
+		kp[3] = (UART_Buffer[6]/100) << 3;
+		kp[4] = (UART_Buffer[6]%100/10) << 3;
+		kp[5] = (UART_Buffer[6]%100%10) << 3;
+		kp[6] = (UART_Buffer[7]/100) << 3;
+		kp[7] = (UART_Buffer[7]%100/10) << 3;
+		kp[8] = (UART_Buffer[7]%100%10) << 3;
 
-		ki[0] = (OSD_Data[8]/100) << 3;
-		ki[1] = (OSD_Data[8]%100/10) << 3;
-		ki[2] = (OSD_Data[8]%100%10) << 3;
-		ki[3] = (OSD_Data[9]/100) << 3;
-		ki[4] = (OSD_Data[9]%100/10) << 3;
-		ki[5] = (OSD_Data[9]%100%10) << 3;
-		ki[6] = (OSD_Data[10]/100) << 3;
-		ki[7] = (OSD_Data[10]%100/10) << 3;
-		ki[8] = (OSD_Data[10]%100%10) << 3;
+		ki[0] = (UART_Buffer[8]/100) << 3;
+		ki[1] = (UART_Buffer[8]%100/10) << 3;
+		ki[2] = (UART_Buffer[8]%100%10) << 3;
+		ki[3] = (UART_Buffer[9]/100) << 3;
+		ki[4] = (UART_Buffer[9]%100/10) << 3;
+		ki[5] = (UART_Buffer[9]%100%10) << 3;
+		ki[6] = (UART_Buffer[10]/100) << 3;
+		ki[7] = (UART_Buffer[10]%100/10) << 3;
+		ki[8] = (UART_Buffer[10]%100%10) << 3;
 
-		kd[0] = (OSD_Data[11]/100) << 3;
-		kd[1] = (OSD_Data[11]%100/10) << 3;
-		kd[2] = (OSD_Data[11]%100%10) << 3;
-		kd[3] = (OSD_Data[12]/100) << 3;
-		kd[4] = (OSD_Data[12]%100/10) << 3;
-		kd[5] = (OSD_Data[12]%100%10) << 3;
-		kd[6] = (OSD_Data[13]/100) << 3;
-		kd[7] = (OSD_Data[13]%100/10) << 3;
-		kd[8] = (OSD_Data[13]%100%10) << 3;
+		kd[0] = (UART_Buffer[11]/100) << 3;
+		kd[1] = (UART_Buffer[11]%100/10) << 3;
+		kd[2] = (UART_Buffer[11]%100%10) << 3;
+		kd[3] = (UART_Buffer[12]/100) << 3;
+		kd[4] = (UART_Buffer[12]%100/10) << 3;
+		kd[5] = (UART_Buffer[12]%100%10) << 3;
+		kd[6] = (UART_Buffer[13]/100) << 3;
+		kd[7] = (UART_Buffer[13]%100/10) << 3;
+		kd[8] = (UART_Buffer[13]%100%10) << 3;
 
 }
 
 
 void motor_window_data()
 {
-		index = index = OSD_Data[4] & 0xf;
+		index = index = UART_Buffer[4] & 0xf;
 
-		m1 = ((OSD_Data[3]>>4) & 0x01) << 3;
-		m2 = ((OSD_Data[3]>>5) & 0x01) << 3;
-		m3 = ((OSD_Data[3]>>6) & 0x01) << 3;
-		m4 = ((OSD_Data[3]>>7) & 0x01) << 3;
+		m1 = ((UART_Buffer[3]>>4) & 0x01) << 3;
+		m2 = ((UART_Buffer[3]>>5) & 0x01) << 3;
+		m3 = ((UART_Buffer[3]>>6) & 0x01) << 3;
+		m4 = ((UART_Buffer[3]>>7) & 0x01) << 3;
 }
 
 
 void receiver_window_data()
 {
-	index = OSD_Data[4] & 0xf;
-	map = (OSD_Data[4] >> 4) & 0xf;
+	index = UART_Buffer[4] & 0xf;
+	map = (UART_Buffer[4] >> 4) & 0xf;
 
-	pry[0] = (OSD_Data[5] >>0) & 0x3;
-	pry[1] = (OSD_Data[5] >>2) & 0x3;
-	pry[2] = (OSD_Data[5] >>4) & 0x3;
-	pry[3] = (OSD_Data[5] >>6) & 0x3;
+	pry[0] = (UART_Buffer[5] >>0) & 0x3;
+	pry[1] = (UART_Buffer[5] >>2) & 0x3;
+	pry[2] = (UART_Buffer[5] >>4) & 0x3;
+	pry[3] = (UART_Buffer[5] >>6) & 0x3;
 
-	chn[0] = (OSD_Data[6] >>0) &0x1;
-	chn[1] = (OSD_Data[6] >>1)&0x1;
-	chn[2] = (OSD_Data[6] >>2)&0x1;
-	chn[3] = (OSD_Data[6] >>3)&0x1;
+	chn[0] = (UART_Buffer[6] >>0) &0x1;
+	chn[1] = (UART_Buffer[6] >>1)&0x1;
+	chn[2] = (UART_Buffer[6] >>2)&0x1;
+	chn[3] = (UART_Buffer[6] >>3)&0x1;
 
 }
 
@@ -158,14 +184,11 @@ void main (void)
 
 		 while (1)
 		 {
-				Read_Data(OSD_Data,15);
-				delay(250);
-				if((OSD_Data[0] & 0x0f) == 0x0f)
-				{
-					if(OSD_Data[14] == OSD_checksum(OSD_Data))
-					{
-						showcase = OSD_Data[3] & 0x0f;
-
+			 if((UART_Buffer[0] & 0x0f) == 0x0f)
+			 {
+				 if(UART_Buffer[14] == OSD_checksum(UART_Buffer))
+				 {
+						showcase = UART_Buffer[3] & 0x0f;
 						switch (showcase)
 						{
 							case 0:

@@ -2,34 +2,22 @@
 #include <SI_EFM8BB2_Register_Enums.h>
 #include "show.h"
 
-unsigned char flag = 0;
-unsigned short line = 0;
 
-unsigned char minute=0;
-unsigned char second=0;
-unsigned char min_text[2] = {0};
-unsigned char sec_text[2] = {0};
-unsigned short rising_count=0;
-unsigned char lock = 0;
-unsigned char showcase = 0;
-unsigned char VOT_value[3] = {0};
-unsigned char flymode = 0;
-unsigned char proto=1;
-unsigned char index=0;
-unsigned char m1 = 0;
-unsigned char m2 = 0;
-unsigned char m3 = 0;
-unsigned char m4 = 0;
-unsigned char  kp[9] = {0};
-unsigned char  ki[9] = {0};
-unsigned char  kd[9] = {0};
-unsigned char  pry[4] = {0};
-unsigned char  chn[4] = {0};
-unsigned char turtle=0;
-unsigned char map=0;
-
+//-----------------------------------------------------------------------------
+// Global Variables
+//-----------------------------------------------------------------------------
+unsigned char  flag = 0;
+unsigned short  rising_count=0;
+unsigned char  minute=0;
+unsigned char  second=0;
 unsigned char UART_Buffer[15] = {0};
 unsigned char UART_Buffer_Size = 0;
+unsigned short  line = 0;
+
+extern unsigned char  lock;
+extern unsigned char  min_text[2];
+extern unsigned char  sec_text[2];
+extern unsigned char  showcase;
 
 SI_INTERRUPT (INT0_ISR, INT0_IRQn)
 {
