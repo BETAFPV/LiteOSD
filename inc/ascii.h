@@ -96,7 +96,7 @@
 #define b10001010 0x8A
 #define b00101000 0x28
 
-unsigned char code U_letters[] = {
+unsigned char code letters[] = {
 // Blank - 0  
 b00000000, 
 b00000000,
