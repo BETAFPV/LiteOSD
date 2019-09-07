@@ -153,19 +153,8 @@ void receiver_window_data()
 
 void main (void)
 {
-	/*关闭看门狗*/
-		WDTCN = 0xDE; //First key
-		WDTCN = 0xAD; //Second key
-
-		CLOCK_Init();
-		EX0_Init();
-		Timer0_Init();
-		SPI0_Init();
-		SCON0_TI = 1;
-		IE_EA = 1;
-		P1MDIN |= P1MDIN_B5__DIGITAL;
-		P1SKIP |= P1SKIP_B5__NOT_SKIPPED;
-		P1MDOUT |= P1MDOUT_B5__OPEN_DRAIN;
+	enter_DefaultMode_from_RESET();
+  IE_EA = 1;
 
 		 while (1)
 		 {
