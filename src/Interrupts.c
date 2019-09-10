@@ -19,6 +19,18 @@ extern unsigned char  min_text[2];
 extern unsigned char  sec_text[2];
 extern unsigned char  showcase;
 
+
+//-----------------------------------------------------------------------------
+// INT0_ISR
+//-----------------------------------------------------------------------------
+//
+// INT0 ISR Content goes here. Remember to clear flag bits:
+// TCON::IE0 (External Interrupt 0)
+//
+// Whenever a negative edge appears on P0.2.
+// The interrupt pending flag is automatically cleared by vectoring to the ISR
+//
+//-----------------------------------------------------------------------------
 SI_INTERRUPT (INT0_ISR, INT0_IRQn)
 {
 	 
@@ -100,27 +112,35 @@ SI_INTERRUPT (INT0_ISR, INT0_IRQn)
 // SCON0::TI (Transmit Interrupt Flag)
 //
 //-----------------------------------------------------------------------------
-
+unsigned char byte = 0;
 SI_INTERRUPT (UART0_ISR, UART0_IRQn)
 {
 	   if (SCON0_RI == 1)
 	   {
-				SCON0_RI = 0;
-	      if(UART_Buffer_Size < 15)
+          SCON0_RI = 0;
+          byte = SBUF0;
+          if(UART_Buffer_Size==0 && (byte & 0x0f) == 0X0F)
 	      {
-					UART_Buffer[UART_Buffer_Size] = SBUF0;
-					UART_Buffer_Size ++;
-	      }
-	      else
+                UART_Buffer[UART_Buffer_Size] = byte;
+                UART_Buffer_Size ++;
+	      }	
+          
+          else if (UART_Buffer_Size >0 && UART_Buffer_Size <15)
+          {
+              UART_Buffer[UART_Buffer_Size] = byte;
+			  UART_Buffer_Size ++;
+          }
+          if(UART_Buffer_Size == 15)
 	      {
 	    	  UART_Buffer_Size =0;
 					
 	      }
-				
+	
 	   }
 	   if (SCON0_TI == 1)                        // Check if transmit flag is set
 	   {
 	      SCON0_TI = 0;
 	   }
 }
+
 

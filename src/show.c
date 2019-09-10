@@ -380,7 +380,7 @@ void set_window(unsigned short line)
 		case 172:
 		case 173:
 			temp = line - 166;
-			if (index == 4)
+			if (index == 5)
 			{
 					delay(32);
 					SPI0DAT = numbers[ 96+(temp)];
@@ -1215,26 +1215,26 @@ void sa_window(unsigned short line)
 		case 76:
 		case 77:
 		case 78:
-			temp = line - 71;
-			delay(30);
-			SPI0DAT = numbers[80+(temp)];
-			SPI0DAT = letters[_s+(temp)];
-			SPI0DAT = letters[_m+(temp)];
-			SPI0DAT = letters[_a+(temp)];
-			SPI0DAT = letters[_r+(temp)];
-			delay(1);
-			SPI0DAT = letters[_t+(temp)];
-			SPI0DAT = letters[_a+(temp)];
-			delay(1);
-			SPI0DAT = letters[_u+(temp)];
-			SPI0DAT = letters[_d+(temp)];
-			delay(1);
-			SPI0DAT = letters[_i+(temp)];
-			delay(1);
-			SPI0DAT = letters[_o+(temp)];
-			delay(1);
-			SPI0DAT = numbers[80+(temp)];
-			break;
+            temp = line - 71;
+            delay(30);
+            SPI0DAT = numbers[80+(temp)];
+            SPI0DAT = letters[_s+(temp)];
+            SPI0DAT = letters[_m+(temp)];
+            SPI0DAT = letters[_a+(temp)];
+            SPI0DAT = letters[_r+(temp)];
+            delay(1);
+            SPI0DAT = letters[_t+(temp)];
+            SPI0DAT = letters[_a+(temp)];
+            delay(1);
+            SPI0DAT = letters[_u+(temp)];
+            SPI0DAT = letters[_d+(temp)];
+            delay(1);
+            SPI0DAT = letters[_i+(temp)];
+            delay(1);
+            SPI0DAT = letters[_o+(temp)];
+            delay(1);
+            SPI0DAT = numbers[80+(temp)];
+            break;
 		
 		case 91:
 		case 92:

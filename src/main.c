@@ -1,3 +1,4 @@
+
 // Resources:
 //   SYSCLK - 32.667 MHz HFOSC0 / 1
 //   UART0  - 115200 baud, 8-N-1
@@ -20,7 +21,7 @@ unsigned short V;
 unsigned char  min_text[2] = {0};
 unsigned char  sec_text[2] = {0};
 unsigned char  lock = 0;
-unsigned char  showcase = 5;
+unsigned char  showcase = 0;
 unsigned char  VOT_value[3] = {0};
 unsigned char  flymode = 0;
 unsigned char  proto=1;
@@ -54,9 +55,10 @@ uint8_t OSD_checksum(uint8_t UART_Buffer[])
     return sum;
 }
 
+
 void flight_window_data()
 {
-		lock = (UART_Buffer[0]>>4) & 0x01;
+	lock = (UART_Buffer[0]>>4) & 0x01;
 
 		V = (UART_Buffer[1] << 8) + UART_Buffer[2];
 		VOT_value[0] = (V/100) << 3;
@@ -106,7 +108,7 @@ void flight_window_data()
 
 		turtle = (UART_Buffer[4]>>6) & 0x3;
 }
-
+ 
 void set_window_data()
 {
 		index = UART_Buffer[4] & 0xf;
@@ -174,22 +176,31 @@ void receiver_window_data()
 	chn[1] = (UART_Buffer[6] >>1)&0x1;
 	chn[2] = (UART_Buffer[6] >>2)&0x1;
 	chn[3] = (UART_Buffer[6] >>3)&0x1;
-
 }
 
+void sa_window_data()
+{
+	index = UART_Buffer[4] & 0xf;
+}
+
+
+//-----------------------------------------------------------------------------
+// Main Routine
+//-----------------------------------------------------------------------------
 void main (void)
 {
-	enter_DefaultMode_from_RESET();
-  IE_EA = 1;
+   enter_DefaultMode_from_RESET();
 
-		 while (1)
+   IE_EA = 1;
+
+   while(1)
+   {
+		 if((UART_Buffer[0] & 0x0f) == 0x0f)
 		 {
-			 if((UART_Buffer[0] & 0x0f) == 0x0f)
+			 if(UART_Buffer[14] == OSD_checksum(UART_Buffer))
 			 {
-				 if(UART_Buffer[14] == OSD_checksum(UART_Buffer))
-				 {
-						showcase = UART_Buffer[3] & 0x0f;
-						switch (showcase)
+					showcase = UART_Buffer[3] & 0x0f;
+					switch (showcase)
 						{
 							case 0:
 								flight_window_data();
@@ -206,10 +217,13 @@ void main (void)
 							case 4:
 								receiver_window_data();
 							break;
+                            case 5:
+								sa_window_data();
 							default:
 								break;
 						}
-					}
 				}
-		 }
+			}
+
+   }
 }
