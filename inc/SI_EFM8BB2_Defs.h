@@ -19,7 +19,7 @@
 #ifndef SI_EFM8BB2_DEFS_H
 #define SI_EFM8BB2_DEFS_H
 
-#include <si_toolchain.h>   
+#include <si_toolchain.h>
 
 //-----------------------------------------------------------------------------
 // Register Definitions
