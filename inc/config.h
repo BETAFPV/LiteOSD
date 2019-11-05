@@ -1,10 +1,7 @@
-#ifndef line_h
-#define line_h
+#ifndef config_h
+#define config_h
 
-
-#define show_centerline (125 < line && line < 142)
-#define show_byline (155 < line && line < 164)
-
+#define show_centerline (125 < line && line < 135)
 #define show_lockline (160 < line && line < 169)
 #define show_turtleline (180 < line && line < 189)
 #define show_modeline (210 < line && line < 219)

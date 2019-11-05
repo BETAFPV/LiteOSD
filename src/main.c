@@ -17,12 +17,14 @@
 //-----------------------------------------------------------------------------
 // Variables in Interrupts.c
 
-unsigned short V;
+unsigned short Vol;
+unsigned short Cur;
 unsigned char  min_text[2] = {0};
 unsigned char  sec_text[2] = {0};
 unsigned char  lock = 0;
-unsigned char  showcase = 0;
+unsigned char  showcase = 9;
 unsigned char  VOT_value[3] = {0};
+unsigned char  Cur_value[3] = {0};
 unsigned char  flymode = 0;
 unsigned char  proto=1;
 unsigned char  index=0;
@@ -39,150 +41,181 @@ unsigned char  turtle=0;
 unsigned char  map=0;
 unsigned char  vtx_power =0;
 unsigned char  channel = 0;
-unsigned char freq = 0;
+unsigned char mode = 0;
+unsigned char  vtx_power_index =0;
+unsigned char  channel_index = 0;
+unsigned char mode_index = 0;
+unsigned char main_version = 0;
+unsigned char modify_version = 0;
 
-extern unsigned char UART_Buffer[15];
-
+extern unsigned char UART_Buffer[12];
+extern void delay(unsigned char n);
 
 uint8_t OSD_checksum(uint8_t UART_Buffer[])
 {
-		unsigned char i;
-		unsigned char sum = 0;
-     for (i = 0; i < 14;i++ )
-		{
-					sum += UART_Buffer[i];
-		}
+    unsigned char i;
+    unsigned char sum = 0;
+    for (i = 0; i < 11;i++ )
+    {
+        sum += UART_Buffer[i];
+    }
     return sum;
 }
 
 
 void flight_window_data()
 {
-	lock = (UART_Buffer[0]>>4) & 0x01;
+	lock = UART_Buffer[1];
 
-		V = (UART_Buffer[1] << 8) + UART_Buffer[2];
-		VOT_value[0] = (V/100) << 3;
-		VOT_value[1] = (V%100/10) << 3;
-		VOT_value[2] = (V%100%10) << 3;
+    Vol = (UART_Buffer[3] << 8) + UART_Buffer[4];
+    VOT_value[0] = (Vol/100) << 3;
+    VOT_value[1] = (Vol%100/10) << 3;
+    VOT_value[2] = (Vol%100%10) << 3;
 
+    proto = UART_Buffer[5];
 
-		chn[1] = (UART_Buffer[6] >>1) & 0x1;
-		chn[2] = (UART_Buffer[6] >>2) & 0x1;;
-		chn[3] = (UART_Buffer[6] >>3) & 0x1;;
+    chn[1] = (UART_Buffer[6] >>0) & 0x1;
+    chn[2] = (UART_Buffer[6] >>1) & 0x1;
+    chn[3] = (UART_Buffer[6] >>2) & 0x1;;
 
-		if(chn[1])
-		{
-			if(chn[2])
-			{
-					if(chn[3])
-					{
-						flymode = 2;
-					}
-					else
-					{
-						flymode = 3;
-					}
-			}
-			else
-			{
-					if(chn[3])
-					{
-						flymode = 4;
-					}
-					else
-					{
-						flymode = 0;
-					}
-			}
-		}
-		else
-		{
-			if(!chn[2])
-			{
-				flymode = 1;
-			}
-		}
+    if(chn[1])
+    {
+        if(chn[2])
+        {
+            if(chn[3])
+            {
+                flymode = 2;
+            }
+            else
+            {
+                flymode = 3;
+            }
+        }
+        else
+        {
+            if(chn[3])
+            {
+                flymode = 4;
+            }
+            else
+            {
+                flymode = 0;
+            }
+        }
+    }
+    else
+    {
+        if(!chn[2])
+        {
+            flymode = 1;
+        }
+    }
 
-
-		proto = (UART_Buffer[0]>>6) & 0x3;
-
-		turtle = (UART_Buffer[4]>>6) & 0x3;
+    turtle = UART_Buffer[7];
+    
+    Cur = (UART_Buffer[8] << 8) + UART_Buffer[9];
+    Cur_value[0] = (Cur/100) << 3;
+    Cur_value[1] = (Cur%100/10) << 3;
+    Cur_value[2] = (Cur%100%10) << 3;
 }
  
 void set_window_data()
 {
-		index = UART_Buffer[4] & 0xf;
+	index = UART_Buffer[1];
+    main_version = UART_Buffer[2]<<3;
+    modify_version = UART_Buffer[3]<<3;
 }
+
 
 void pid_window_data()
 {
-		index = index = UART_Buffer[4] & 0xf;
+	index = UART_Buffer[1];
 
-		kp[0] = (UART_Buffer[5]/100) << 3;
-		kp[1] = (UART_Buffer[5]%100/10) << 3;
-		kp[2] = (UART_Buffer[5]%100%10) << 3;
-		kp[3] = (UART_Buffer[6]/100) << 3;
-		kp[4] = (UART_Buffer[6]%100/10) << 3;
-		kp[5] = (UART_Buffer[6]%100%10) << 3;
-		kp[6] = (UART_Buffer[7]/100) << 3;
-		kp[7] = (UART_Buffer[7]%100/10) << 3;
-		kp[8] = (UART_Buffer[7]%100%10) << 3;
 
-		ki[0] = (UART_Buffer[8]/100) << 3;
-		ki[1] = (UART_Buffer[8]%100/10) << 3;
-		ki[2] = (UART_Buffer[8]%100%10) << 3;
-		ki[3] = (UART_Buffer[9]/100) << 3;
-		ki[4] = (UART_Buffer[9]%100/10) << 3;
-		ki[5] = (UART_Buffer[9]%100%10) << 3;
-		ki[6] = (UART_Buffer[10]/100) << 3;
-		ki[7] = (UART_Buffer[10]%100/10) << 3;
-		ki[8] = (UART_Buffer[10]%100%10) << 3;
+    kp[0] = (UART_Buffer[2]/100) << 3;
+    kp[1] = (UART_Buffer[2]%100/10) << 3;
+    kp[2] = (UART_Buffer[2]%100%10) << 3;
+    kp[3] = (UART_Buffer[3]/100) << 3;
+    kp[4] = (UART_Buffer[3]%100/10) << 3;
+    kp[5] = (UART_Buffer[3]%100%10) << 3;
+    kp[6] = (UART_Buffer[4]/100) << 3;
+    kp[7] = (UART_Buffer[4]%100/10) << 3;
+    kp[8] = (UART_Buffer[4]%100%10) << 3;
 
-		kd[0] = (UART_Buffer[11]/100) << 3;
-		kd[1] = (UART_Buffer[11]%100/10) << 3;
-		kd[2] = (UART_Buffer[11]%100%10) << 3;
-		kd[3] = (UART_Buffer[12]/100) << 3;
-		kd[4] = (UART_Buffer[12]%100/10) << 3;
-		kd[5] = (UART_Buffer[12]%100%10) << 3;
-		kd[6] = (UART_Buffer[13]/100) << 3;
-		kd[7] = (UART_Buffer[13]%100/10) << 3;
-		kd[8] = (UART_Buffer[13]%100%10) << 3;
+    ki[0] = (UART_Buffer[5]/100) << 3;
+    ki[1] = (UART_Buffer[5]%100/10) << 3;
+    ki[2] = (UART_Buffer[5]%100%10) << 3;
+    ki[3] = (UART_Buffer[6]/100) << 3;
+    ki[4] = (UART_Buffer[6]%100/10) << 3;
+    ki[5] = (UART_Buffer[6]%100%10) << 3; 
+    ki[6] = (UART_Buffer[7]/100) << 3;
+    ki[7] = (UART_Buffer[7]%100/10) << 3;
+    ki[8] = (UART_Buffer[7]%100%10) << 3;
 
+    kd[0] = (UART_Buffer[8]/100) << 3;
+    kd[1] = (UART_Buffer[8]%100/10) << 3;
+    kd[2] = (UART_Buffer[8]%100%10) << 3;
+    kd[3] = (UART_Buffer[9]/100) << 3;
+    kd[4] = (UART_Buffer[9]%100/10) << 3;
+    kd[5] = (UART_Buffer[9]%100%10) << 3;
+    kd[6] = (UART_Buffer[10]/100) << 3;
+    kd[7] = (UART_Buffer[10]%100/10) << 3;
+    kd[8] = (UART_Buffer[10]%100%10) << 3;
 }
+
 
 
 void motor_window_data()
 {
-		index = index = UART_Buffer[4] & 0xf;
+    index = UART_Buffer[1];
 
-		m1 = ((UART_Buffer[3]>>4) & 0x01) << 3;
-		m2 = ((UART_Buffer[3]>>5) & 0x01) << 3;
-		m3 = ((UART_Buffer[3]>>6) & 0x01) << 3;
-		m4 = ((UART_Buffer[3]>>7) & 0x01) << 3;
+    m1 = ((UART_Buffer[2]>>0) & 0x01) << 3;
+    m2 = ((UART_Buffer[2]>>1) & 0x01) << 3;
+    m3 = ((UART_Buffer[2]>>2) & 0x01) << 3;
+    m4 = ((UART_Buffer[2]>>3) & 0x01) << 3;
 }
 
 
 void receiver_window_data()
 {
-	index = UART_Buffer[4] & 0xf;
-	map = (UART_Buffer[4] >> 4) & 0xf;
+	index = UART_Buffer[1];
+	
 
-	pry[0] = (UART_Buffer[5] >>0) & 0x3;
-	pry[1] = (UART_Buffer[5] >>2) & 0x3;
-	pry[2] = (UART_Buffer[5] >>4) & 0x3;
-	pry[3] = (UART_Buffer[5] >>6) & 0x3;
+	pry[0] = (UART_Buffer[2] >>0) & 0x3;
+	pry[1] = (UART_Buffer[2] >>2) & 0x3;
+	pry[2] = (UART_Buffer[2] >>4) & 0x3;
+	pry[3] = (UART_Buffer[2] >>6) & 0x3;
 
-	chn[0] = (UART_Buffer[6] >>0) &0x1;
-	chn[1] = (UART_Buffer[6] >>1)&0x1;
-	chn[2] = (UART_Buffer[6] >>2)&0x1;
-	chn[3] = (UART_Buffer[6] >>3)&0x1;
+	chn[0] = (UART_Buffer[3] ) &0x1;
+	chn[1] = (UART_Buffer[4] )&0x1;
+	chn[2] = (UART_Buffer[5] )&0x1;
+	chn[3] = (UART_Buffer[6] )&0x1;
+    map = UART_Buffer[7];
 }
 
 void sa_window_data()
 {
-	index = UART_Buffer[4] & 0xf;
+	index = UART_Buffer[1];
+    
+    channel = UART_Buffer[2];
+    vtx_power = UART_Buffer[3];
+    mode = UART_Buffer[4];
+    
+    channel_index = UART_Buffer[5];
+    vtx_power_index = UART_Buffer[6];
+    mode_index = UART_Buffer[7];
 }
 
+
+
+void delayS(unsigned char n)
+{
+	unsigned char i;
+    unsigned int j;
+	for(i=0;i<n;i++)
+        for(j=500000;j>0;j--);
+        
+}
 
 //-----------------------------------------------------------------------------
 // Main Routine
@@ -192,38 +225,38 @@ void main (void)
    enter_DefaultMode_from_RESET();
 
    IE_EA = 1;
-
+ 
+   delayS(250);
+   SPI0CKR = (1 << SPI0CKR_SPI0CKR__SHIFT);
+    
    while(1)
    {
-		 if((UART_Buffer[0] & 0x0f) == 0x0f)
-		 {
-			 if(UART_Buffer[14] == OSD_checksum(UART_Buffer))
-			 {
-					showcase = UART_Buffer[3] & 0x0f;
-					switch (showcase)
-						{
-							case 0:
-								flight_window_data();
-								break;
-							case 1:
-								set_window_data();
-								break;
-							case 2:
-								pid_window_data();
-								break;
-							case 3:
-								motor_window_data();
-								break;
-							case 4:
-								receiver_window_data();
-							break;
-                            case 5:
-								sa_window_data();
-							default:
-								break;
-						}
-				}
-			}
-
+     if(UART_Buffer[11] == OSD_checksum(UART_Buffer))
+     {
+        showcase = (UART_Buffer[0]>>4) & 0x0f;
+        switch (showcase)
+        {
+            case 0:
+                flight_window_data();
+                break;
+            case 1:
+                set_window_data();
+                break;
+            case 2:
+                pid_window_data();
+                break;
+            case 3:
+                motor_window_data();
+                break;
+            case 4:
+                receiver_window_data();
+                break;
+            case 5:
+                sa_window_data();
+                break;
+            default:
+                break;
+        }
+     }
    }
 }

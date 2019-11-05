@@ -2869,10 +2869,14 @@
 //------------------------------------------------------------------------------
 #define SMB0TC_SDD__FMASK         0x03 ///< SMBus Start Detection Window                     
 #define SMB0TC_SDD__SHIFT         0x00 ///< SMBus Start Detection Window                     
-#define SMB0TC_SDD__NONE          0x00 ///< No additional hold time window (0-1 SYSCLK).     
-#define SMB0TC_SDD__ADD_2_SYSCLKS 0x01 ///< Increase hold time window to 2-3 SYSCLKs.        
-#define SMB0TC_SDD__ADD_4_SYSCLKS 0x02 ///< Increase hold time window to 4-5 SYSCLKs.        
-#define SMB0TC_SDD__ADD_8_SYSCLKS 0x03 ///< Increase hold time window to 8-9 SYSCLKs.        
+#define SMB0TC_SDD__NONE          0x00 ///< No additional SDA falling edge recognition delay 
+                                       ///< (0-1 SYSCLK).                                    
+#define SMB0TC_SDD__ADD_2_SYSCLKS 0x01 ///< Increase SDA falling edge recognition time window
+                                       ///< to 2-3 SYSCLKs after the SCL falling edge.       
+#define SMB0TC_SDD__ADD_4_SYSCLKS 0x02 ///< Increase SDA falling edge recognition window to  
+                                       ///< 4-5 SYSCLKs after the SCL falling edge.          
+#define SMB0TC_SDD__ADD_8_SYSCLKS 0x03 ///< Increase SDA falling edge recognition window to  
+                                       ///< 8-9 SYSCLKs after the SCL falling edge.          
                                                                                              
 #define SMB0TC_SWAP__BMASK        0x80 ///< SMBus Swap Pins                                  
 #define SMB0TC_SWAP__SHIFT        0x07 ///< SMBus Swap Pins                                  

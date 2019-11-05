@@ -1,4 +1,3 @@
-// USER INCLUDES
 #include <SI_EFM8BB2_Register_Enums.h>
 #include "InitDevice.h"
 
@@ -429,7 +428,7 @@ extern void SPI_0_enter_DefaultMode_from_RESET(void) {
 	/*
 	// SPI0CKR (SPI0 Clock Rate) = 0x17
 	*/
-	SPI0CKR = (1 << SPI0CKR_SPI0CKR__SHIFT);
+	SPI0CKR = (4 << SPI0CKR_SPI0CKR__SHIFT);
 	// [SPI0CKR - SPI0 Clock Rate]$
 
 	// $[SPI0CFG - SPI0 Configuration]
