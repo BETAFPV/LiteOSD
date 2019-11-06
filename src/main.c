@@ -24,6 +24,7 @@ unsigned char  sec_text[2] = {0};
 unsigned char  lock = 0;
 unsigned char  showcase = 9;
 unsigned char  VOT_value[3] = {0};
+unsigned char  Cur_value[3] = {0};
 unsigned char  flymode = 0;
 unsigned char  proto=1;
 unsigned char  index=0;
@@ -37,13 +38,10 @@ unsigned char   kd[9] = {0};
 unsigned char   pry[4] = {0};
 unsigned char   chn[4] = {0};
 unsigned char  turtle=0;
-unsigned char  map=0;
 unsigned char  vtx_power =0;
 unsigned char  channel = 0;
-unsigned char mode = 0;
 unsigned char  vtx_power_index =0;
 unsigned char  channel_index = 0;
-unsigned char mode_index = 0;
 unsigned char main_version = 0;
 unsigned char modify_version = 0;
 
@@ -112,6 +110,10 @@ void flight_window_data()
 
     turtle = UART_Buffer[7];
     
+    Cur = (UART_Buffer[8] << 8) + UART_Buffer[9];
+    Cur_value[0] = (Cur/100) << 3;
+    Cur_value[1] = (Cur%100/10) << 3;
+    Cur_value[2] = (Cur%100%10) << 3;
 }
  
 void set_window_data()
@@ -185,7 +187,6 @@ void receiver_window_data()
 	chn[1] = (UART_Buffer[4] )&0x1;
 	chn[2] = (UART_Buffer[5] )&0x1;
 	chn[3] = (UART_Buffer[6] )&0x1;
-    map = UART_Buffer[7];
 }
 
 void sa_window_data()
@@ -194,11 +195,8 @@ void sa_window_data()
     
     channel = UART_Buffer[2];
     vtx_power = UART_Buffer[3];
-    mode = UART_Buffer[4];
-    
     channel_index = UART_Buffer[5];
     vtx_power_index = UART_Buffer[6];
-    mode_index = UART_Buffer[7];
 }
 
 
@@ -222,9 +220,7 @@ void main (void)
    IE_EA = 1;
  
    delayS(250);
-    
    delayS(200);
-    
    SPI0CKR = (1 << SPI0CKR_SPI0CKR__SHIFT);
     
    while(1)

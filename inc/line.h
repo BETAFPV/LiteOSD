@@ -3,9 +3,8 @@
 
 
 #define show_centerline (120 < line && line < 137)
-#define show_betafpvline (160 < line && line < 169)
 #define show_byline (144 < line && line < 153)
-
+#define show_betafpvline (160 < line && line < 169)
 #define show_lockline (160 < line && line < 169)
 #define show_turtleline (180 < line && line < 189)
 #define show_modeline (210 < line && line < 219)
@@ -31,9 +30,6 @@
 #define show_m3line (130 < line && line < 139)
 #define show_m4line (145 < line && line < 155)
 #define show_motor_exitline (165 < line && line < 175)
-
-
-
 
 
 

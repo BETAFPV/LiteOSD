@@ -6,6 +6,8 @@
 #define P_0 { \
 				SPI0DAT = numbers[ 0+(temp)]; \
 				SPI0DAT = numbers[ 0+(temp)]; \
+                SPI0DAT = letters[ _m+(temp)]; \
+                SPI0DAT = letters[ _w+(temp)]; \
 		}
 #define P_1 { \
 				SPI0DAT = numbers[ 16+(temp)]; \

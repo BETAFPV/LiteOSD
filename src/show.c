@@ -4,7 +4,8 @@
 
 unsigned char  temp = 0;
 extern unsigned short line;
-extern unsigned char  VOT_value[3];     
+extern unsigned char  VOT_value[3];   
+extern unsigned char  Cur_value[3];   
 extern unsigned char  min_text[2];
 extern unsigned char  sec_text[2];
 extern unsigned char  minute;
@@ -24,7 +25,6 @@ extern unsigned char  showcase;
 extern unsigned char  pry[4];
 extern unsigned char  chn[4];
 extern unsigned char  turtle;
-extern unsigned char  map;
 extern unsigned char  vtx_power;
 extern unsigned char  channel;
 extern unsigned char  mode;
@@ -187,7 +187,7 @@ void delay(unsigned char n)
 
 void init_window(unsigned short line)
 {
-    if(show_centerline)
+     if(show_centerline)
     {
         temp = line - 120;
         delay(50);
@@ -240,7 +240,7 @@ void flight_window(unsigned short line)
     if(show_lockline)
     {
         temp = line - 161;
-        if(VOT_value[0]<=24 && VOT_value[1]< 24)
+        if((VOT_value[0]<=48 && VOT_value[1]< 64) || VOT_value[0]<48)
         {
             delay(65);
             SPI0DAT = letters[_l+(temp)];
@@ -394,8 +394,10 @@ void flight_window(unsigned short line)
         temp = line - 221;
         delay(8);
         SPI0DAT =letters[ _v+(temp)];
-        SPI0DAT =letters[_o+(temp)];
-        SPI0DAT =letters[_l+(temp)];
+        SPI0DAT =numbers[VOT_value[0]+(temp)];
+        SPI0DAT =numbers[88+(temp)];
+        SPI0DAT =numbers[VOT_value[1]+(temp)];
+        SPI0DAT =numbers[VOT_value[2]+(temp)];
 
         delay(132);
         SPI0DAT =letters[_t+(temp)];
@@ -407,10 +409,11 @@ void flight_window(unsigned short line)
     {
         temp = line - 231;
         delay(5);
-        SPI0DAT =numbers[VOT_value[0]+(temp)];
+        SPI0DAT =letters[ _a+(temp)];
+        SPI0DAT =numbers[Cur_value[0]+(temp)];
+        SPI0DAT =numbers[Cur_value[1]+(temp)];
         SPI0DAT =numbers[88+(temp)];
-        SPI0DAT =numbers[VOT_value[1]+(temp)];
-        SPI0DAT =numbers[VOT_value[2]+(temp)];
+        SPI0DAT =numbers[Cur_value[2]+(temp)];
 
         delay(132);
         SPI0DAT =numbers[ min_text[0]+(temp)];
@@ -418,7 +421,6 @@ void flight_window(unsigned short line)
         SPI0DAT =numbers[104+(temp)];
         SPI0DAT =numbers[ sec_text[0]+(temp)];
         SPI0DAT =numbers[ sec_text[1]+(temp)];
-
     }
 }
 
@@ -444,7 +446,7 @@ void set_window(unsigned short line)
             delay(1);
             SPI0DAT = letters[ _e+(temp)];
             SPI0DAT = letters[ 0+(temp)];
-            SPI0DAT = numbers[8+(temp)];
+            SPI0DAT = numbers[16+(temp)];
             delay(1);
             SPI0DAT = letters[ _s+(temp)];
             delay(1);
@@ -1570,32 +1572,6 @@ void sa_window(unsigned short line)
 			switch_power(vtx_power_index);
 			break;
 
-//		case 141:
-//		case 142:
-//		case 143:
-//		case 144:
-//		case 145:
-//		case 146:
-//		case 147:
-//		case 148:
-//			temp = line - 141;
-//			if (index == 2)
-//			{
-//					delay(34);
-//					SPI0DAT = numbers[ 96+(temp)];
-//			}
-//			else
-//			{
-//					delay(36);
-//			}
-//			SPI0DAT = letters[0+(temp)];
-//			SPI0DAT = letters[_m+(temp)];
-//			SPI0DAT = letters[_o+(temp)];
-//			SPI0DAT = letters[_d+(temp)];
-//			SPI0DAT = letters[_e+(temp)];
-//			delay(47);
-			
-			break;
 		case 141:
 		case 142:
 		case 143:
