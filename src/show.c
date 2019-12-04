@@ -240,7 +240,7 @@ void flight_window(unsigned short line)
     if(show_lockline)
     {
         temp = line - 161;
-        if(VOT_value[0]<24 ||( VOT_value[0] == 24 && VOT_value[1] ==0))
+        if((VOT_value[0]==24 && VOT_value[1] <=8) || VOT_value[0]<24)
         {
             delay(65);
             SPI0DAT = letters[_l+(temp)];
