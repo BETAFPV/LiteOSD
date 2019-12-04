@@ -10,11 +10,15 @@
 #define P_1 { \
 				SPI0DAT = numbers[ 16+(temp)]; \
 				SPI0DAT = numbers[ 40+(temp)]; \
+                SPI0DAT = letters[ _m+(temp)]; \
+                SPI0DAT = letters[ _w+(temp)]; \
 		}
 #define P_2 { \
 				SPI0DAT = numbers[ 16+(temp)]; \
 				SPI0DAT = numbers[ 0+(temp)]; \
 				SPI0DAT = numbers[ 0+(temp)]; \
+                SPI0DAT = letters[ _m+(temp)]; \
+                SPI0DAT = letters[ _w+(temp)]; \
 		}
 
 

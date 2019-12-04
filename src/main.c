@@ -24,7 +24,6 @@ unsigned char  sec_text[2] = {0};
 unsigned char  lock = 0;
 unsigned char  showcase = 9;
 unsigned char  VOT_value[3] = {0};
-unsigned char  Cur_value[3] = {0};
 unsigned char  flymode = 0;
 unsigned char  proto=1;
 unsigned char  index=0;
@@ -113,10 +112,6 @@ void flight_window_data()
 
     turtle = UART_Buffer[7];
     
-    Cur = (UART_Buffer[8] << 8) + UART_Buffer[9];
-    Cur_value[0] = (Cur/100) << 3;
-    Cur_value[1] = (Cur%100/10) << 3;
-    Cur_value[2] = (Cur%100%10) << 3;
 }
  
 void set_window_data()
@@ -227,6 +222,9 @@ void main (void)
    IE_EA = 1;
  
    delayS(250);
+    
+   delayS(200);
+    
    SPI0CKR = (1 << SPI0CKR_SPI0CKR__SHIFT);
     
    while(1)
