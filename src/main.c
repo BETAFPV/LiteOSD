@@ -34,18 +34,32 @@ unsigned char  m4 = 0;
 unsigned char   kp[9] = {0};
 unsigned char   ki[9] = {0};
 unsigned char   kd[9] = {0};
-unsigned char   pry[4] = {0};
+unsigned char   rx0[3] = {0};
+unsigned char   rx1[3] = {0};
+unsigned char   rx2[3] = {0};
+unsigned char   rx3[3] = {0};
 unsigned char   chn[4] = {0};
 unsigned char  turtle=0;
-unsigned char  map=0;
 unsigned char  vtx_power =0;
 unsigned char  channel = 0;
-unsigned char mode = 0;
 unsigned char  vtx_power_index =0;
 unsigned char  channel_index = 0;
-unsigned char mode_index = 0;
 unsigned char main_version = 0;
 unsigned char modify_version = 0;
+
+
+unsigned char low_bat_l=160;
+unsigned char disarm_l=160;
+unsigned char mode_l=210;
+unsigned char vol_l=220;
+unsigned char curr_l=230;
+unsigned char turtle_l=180;
+
+unsigned char low_bat_l_temp[2]={0};
+unsigned char mode_l_temp[2]={0};
+unsigned char vol_l_temp[2]={0};
+unsigned char turtle_l_temp[2]={0};
+unsigned char low_battery[2]={24,16};
 
 extern unsigned char UART_Buffer[12];
 extern void delay(unsigned char n);
@@ -61,6 +75,31 @@ uint8_t OSD_checksum(uint8_t UART_Buffer[])
     return sum;
 }
 
+void display_window_data()
+{
+    index = UART_Buffer[1];
+    
+    low_bat_l = UART_Buffer[2] * 10;
+    mode_l = UART_Buffer[3] *10 ;
+    vol_l = UART_Buffer[4] *10 ;
+    curr_l = UART_Buffer[5] * 10;
+    turtle_l = UART_Buffer[6] * 10;
+    
+    low_bat_l_temp[0] = (UART_Buffer[2]/10) << 3;
+    low_bat_l_temp[1] = (UART_Buffer[2]%10) << 3;
+    
+    mode_l_temp[0] = (UART_Buffer[3]/10) << 3;
+    mode_l_temp[1] = (UART_Buffer[3]%10) << 3;
+    
+    vol_l_temp[0] = (UART_Buffer[4]/10) << 3;
+    vol_l_temp[1] = (UART_Buffer[4]%10) << 3;
+        
+    turtle_l_temp[0] = (UART_Buffer[6]/10) << 3;
+    turtle_l_temp[1] = (UART_Buffer[6]%10) << 3;
+
+    low_battery[0] = (UART_Buffer[7]/10) << 3;
+    low_battery[1] = (UART_Buffer[7]%10) << 3;
+}
 
 void flight_window_data()
 {
@@ -75,7 +114,7 @@ void flight_window_data()
 
     chn[1] = (UART_Buffer[6] >>0) & 0x1;
     chn[2] = (UART_Buffer[6] >>1) & 0x1;
-    chn[3] = (UART_Buffer[6] >>2) & 0x1;;
+    chn[3] = (UART_Buffer[6] >>2) & 0x1;
 
     if(chn[1])
     {
@@ -176,16 +215,26 @@ void receiver_window_data()
 	index = UART_Buffer[1];
 	
 
-	pry[0] = (UART_Buffer[2] >>0) & 0x3;
-	pry[1] = (UART_Buffer[2] >>2) & 0x3;
-	pry[2] = (UART_Buffer[2] >>4) & 0x3;
-	pry[3] = (UART_Buffer[2] >>6) & 0x3;
+	rx0[0] = (UART_Buffer[2]/100) << 3;
+    rx0[1] = (UART_Buffer[2]%100/10) << 3;
+    rx0[2] = (UART_Buffer[2]%100%10) << 3;
 
-	chn[0] = (UART_Buffer[3] ) &0x1;
-	chn[1] = (UART_Buffer[4] )&0x1;
-	chn[2] = (UART_Buffer[5] )&0x1;
-	chn[3] = (UART_Buffer[6] )&0x1;
-    map = UART_Buffer[7];
+    rx1[0] = (UART_Buffer[3]/100) << 3;
+    rx1[1] = (UART_Buffer[3]%100/10) << 3;
+    rx1[2] = (UART_Buffer[3]%100%10) << 3;
+    
+    rx2[0] = (UART_Buffer[4]/100) << 3;
+    rx2[1] = (UART_Buffer[4]%100/10) << 3;
+    rx2[2] = (UART_Buffer[4]%100%10) << 3;
+    
+    rx3[0] = (UART_Buffer[5]/100) << 3;
+    rx3[1] = (UART_Buffer[5]%100/10) << 3;
+    rx3[2] = (UART_Buffer[5]%100%10) << 3;
+    
+	chn[0] = (UART_Buffer[6] ) &0x1;
+	chn[1] = (UART_Buffer[7] )&0x1;
+	chn[2] = (UART_Buffer[8] )&0x1;
+	chn[3] = (UART_Buffer[9] )&0x1;
 }
 
 void sa_window_data()
@@ -194,11 +243,8 @@ void sa_window_data()
     
     channel = UART_Buffer[2];
     vtx_power = UART_Buffer[3];
-    mode = UART_Buffer[4];
-    
     channel_index = UART_Buffer[5];
     vtx_power_index = UART_Buffer[6];
-    mode_index = UART_Buffer[7];
 }
 
 
@@ -220,12 +266,10 @@ void main (void)
    enter_DefaultMode_from_RESET();
 
    IE_EA = 1;
- 
    delayS(250);
-    
    delayS(200);
+   SPI0CKR = (3 << SPI0CKR_SPI0CKR__SHIFT);
     
-   SPI0CKR = (1 << SPI0CKR_SPI0CKR__SHIFT);
     
    while(1)
    {
@@ -251,6 +295,9 @@ void main (void)
                 break;
             case 5:
                 sa_window_data();
+                break;
+            case 6:
+                display_window_data();
                 break;
             default:
                 break;
