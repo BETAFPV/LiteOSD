@@ -18,7 +18,6 @@
 // Variables in Interrupts.c
 
 unsigned short Vol;
-unsigned short Cur;
 unsigned char  min_text[2] = {0};
 unsigned char  sec_text[2] = {0};
 unsigned char  lock = 0;
@@ -51,7 +50,6 @@ unsigned char modify_version = 0;
 unsigned short low_bat_l=160;
 unsigned short mode_l=210;
 unsigned short vol_l=220;
-unsigned short curr_l=230;
 unsigned short turtle_l=180;
 
 unsigned char low_bat_l_temp[2]={0};
@@ -81,7 +79,6 @@ void display_window_data()
     low_bat_l = UART_Buffer[2] * 10;
     mode_l = UART_Buffer[3] *10 ;
     vol_l = UART_Buffer[4] *10 ;
-    curr_l = UART_Buffer[5] * 10;
     turtle_l = UART_Buffer[6] * 10;
     
     low_bat_l_temp[0] = (UART_Buffer[2]/10) << 3;

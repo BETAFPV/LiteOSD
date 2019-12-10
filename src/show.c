@@ -38,7 +38,6 @@ extern unsigned char low_line_h;
 extern unsigned short low_bat_l;
 extern unsigned short mode_l;
 extern unsigned short vol_l;
-extern unsigned short curr_l;
 extern unsigned short turtle_l;
 
 extern unsigned char low_bat_l_temp[2];
@@ -226,13 +225,6 @@ void init_window(unsigned short line)
         delay(10);
         SPI0DAT = ULetters[64+(temp)];
     }
-//    if(show_byline)
-//    {
-//        temp = line - 144;
-//        delay(85);
-//        SPI0DAT = PLetters[32+(temp)];
-//        SPI0DAT = PLetters[40+(temp)];
-//    }
     if(show_betafpvline)
     {
         temp = line - 160;
