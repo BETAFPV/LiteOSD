@@ -22,7 +22,6 @@ extern unsigned char  kp[9];
 extern unsigned char  ki[9];
 extern unsigned char  kd[9];
 extern unsigned char  showcase;
-extern unsigned char  pry[4];
 extern unsigned char  chn[4];
 extern unsigned char  turtle;
 extern unsigned char  vtx_power;
@@ -36,12 +35,11 @@ extern unsigned char modify_version;
 extern unsigned char low_line_l;
 extern unsigned char low_line_h;
 
-extern unsigned char low_bat_l;
-extern unsigned char disarm_l;
-extern unsigned char mode_l;
-extern unsigned char vol_l;
-extern unsigned char curr_l;
-extern unsigned char turtle_l;
+extern unsigned short low_bat_l;
+extern unsigned short mode_l;
+extern unsigned short vol_l;
+extern unsigned short curr_l;
+extern unsigned short turtle_l;
 
 extern unsigned char low_bat_l_temp[2];
 extern unsigned char mode_l_temp[2];
@@ -1897,10 +1895,4 @@ void display_window(unsigned short line)
     
 }
 
-
-void rates_window(unsigned short line)
-{
-    
-    
-}
 

@@ -49,12 +49,11 @@ unsigned char main_version = 0;
 unsigned char modify_version = 0;
 
 
-unsigned char low_bat_l=160;
-unsigned char disarm_l=160;
-unsigned char mode_l=210;
-unsigned char vol_l=220;
-unsigned char curr_l=230;
-unsigned char turtle_l=180;
+unsigned short low_bat_l=160;
+unsigned short mode_l=210;
+unsigned short vol_l=220;
+unsigned short curr_l=230;
+unsigned short turtle_l=180;
 
 unsigned char low_bat_l_temp[2]={0};
 unsigned char mode_l_temp[2]={0};

@@ -93,9 +93,6 @@ SI_INTERRUPT (INT0_ISR, INT0_IRQn)
             case 6:
                 display_window(line);
                 break;
-            case 7:
-                rates_window(line);
-                break;
             default:
                 init_window(line);
                 break;
