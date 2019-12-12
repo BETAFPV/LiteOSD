@@ -302,8 +302,8 @@ void main (void)
    enter_DefaultMode_from_RESET();
 
    IE_EA = 1;
-//   delayS(250);
-//   delayS(200);
+   delayS(250);
+   delayS(200);
    SPI0CKR = (3 << SPI0CKR_SPI0CKR__SHIFT);
     
     
