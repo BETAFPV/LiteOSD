@@ -53,6 +53,10 @@ extern unsigned char   rx1[3];
 extern unsigned char   rx2[3];
 extern unsigned char   rx3[3];
 
+extern unsigned char rate[4];
+extern unsigned char rate_yaw[4];
+extern unsigned char profileAB;
+
 void switch_channel(unsigned char index)
 {
     switch(index)
@@ -227,13 +231,6 @@ void init_window(unsigned short line)
         delay(10);
         SPI0DAT = ULetters[64+(temp)];
     }
-//    if(show_byline)
-//    {
-//        temp = line - 144;
-//        delay(85);
-//        SPI0DAT = PLetters[32+(temp)];
-//        SPI0DAT = PLetters[40+(temp)];
-//    }
     if(show_betafpvline)
     {
         temp = line - 160;
@@ -663,8 +660,8 @@ void set_window(unsigned short line)
             delay(78);
 			SPI0DAT = numbers[ 96+(temp)];
 			break;
-            
-		case 186:
+          
+        case 186:
 		case 187:
 		case 188:
 		case 189:
@@ -674,6 +671,36 @@ void set_window(unsigned short line)
 		case 193:
 			temp = line - 186;
 			if (index == 5)
+			{
+					delay(57);
+					SPI0DAT = numbers[ 96+(temp)];
+			}
+			else
+			{
+					delay(64);
+			}
+			SPI0DAT = letters[0+(temp)];
+			SPI0DAT = letters[_r+(temp)];
+			SPI0DAT = letters[_a+(temp)];
+			SPI0DAT = letters[_t+(temp)];
+            delay(1);
+			SPI0DAT = letters[_e+(temp)];
+            delay(3);
+            SPI0DAT = letters[_s+(temp)];
+            delay(92);
+			SPI0DAT = numbers[ 96+(temp)];
+			break;
+            
+		case 201:
+		case 202:
+		case 203:
+		case 204:
+		case 205:
+		case 206:
+		case 207:
+		case 208:
+			temp = line - 201;
+			if (index == 6)
 			{
 					delay(56);
 					SPI0DAT = numbers[ 96+(temp)];
@@ -689,16 +716,16 @@ void set_window(unsigned short line)
             delay(1);
 			SPI0DAT = letters[_e+(temp)];
 			break;
-		case 201:
-		case 202:
-		case 203:
-		case 204:
-		case 205:
-		case 206:
-		case 207:
-		case 208:
-			temp = line - 201;
-			if (index == 6)
+		case 216:
+		case 217:
+		case 218:
+		case 219:
+		case 220:
+		case 221:
+		case 222:
+		case 223:
+			temp = line - 216;
+			if (index == 7)
 			{
 					delay(56);
 					SPI0DAT = numbers[ 96+(temp)];
@@ -1894,5 +1921,178 @@ void display_window(unsigned short line)
 	}
     
 }
+
+
+void rates_window(unsigned short line)
+{
+    switch (line)
+	{
+		case 71:
+		case 72:
+		case 73:
+		case 74:
+		case 75:
+		case 76:
+		case 77:
+		case 78:
+            temp = line - 71;
+            delay(60);
+            SPI0DAT = numbers[80+(temp)];
+            SPI0DAT = letters[_r+(temp)];
+            SPI0DAT = letters[_a+(temp)];
+            SPI0DAT = letters[_t+(temp)];
+            SPI0DAT = letters[_e+(temp)];
+            delay(1);
+            SPI0DAT = letters[_s+(temp)];
+            delay(3);
+            SPI0DAT = numbers[80+(temp)];
+            break;
+		
+		case 96:
+		case 97:
+		case 98:
+		case 99:
+		case 100:
+		case 101:
+		case 102:
+		case 103:
+			temp = line - 96;
+			if (index == 0){
+				delay(61);
+				SPI0DAT = numbers[ 96+(temp)];
+
+			}else{
+				delay(68);
+			}
+            SPI0DAT = letters[0+(temp)];
+            SPI0DAT = letters[_r+(temp)];
+            SPI0DAT = letters[_a+(temp)];
+            SPI0DAT = letters[_t+(temp)];
+            delay(3);
+            SPI0DAT = letters[_e+(temp)];
+            delay(3);
+            SPI0DAT = numbers[ 104+(temp)];
+            delay(50);
+            SPI0DAT = numbers[rate[0]+(temp)];
+            SPI0DAT = numbers[rate[1]+(temp)];
+            SPI0DAT = numbers[rate[2]+(temp)];
+            SPI0DAT = numbers[rate[3]+(temp)];
+            delay(1);
+
+			break;
+
+		case 111:
+		case 112:
+		case 113:
+		case 114:
+		case 115:
+		case 116:
+		case 117:
+		case 118:
+			temp = line - 111;
+			if (index == 1){
+				delay(60);
+				SPI0DAT = numbers[ 96+(temp)];
+
+			}else{
+				delay(67);
+			}
+            SPI0DAT = letters[0+(temp)];
+            SPI0DAT = letters[_r+(temp)];
+            SPI0DAT = letters[_a+(temp)];
+            SPI0DAT = letters[_t+(temp)];
+            delay(3);
+            SPI0DAT = letters[_e+(temp)];
+            delay(3);
+            SPI0DAT =numbers[144+(temp)];
+            delay(3);
+            SPI0DAT = letters[_y+(temp)];
+            delay(3);
+            SPI0DAT = letters[_a+(temp)];
+            delay(3);
+            SPI0DAT = letters[_w+(temp)];
+            delay(4);
+            SPI0DAT = numbers[ 104+(temp)];
+
+            delay(55);
+            SPI0DAT = numbers[rate_yaw[0]+(temp)];
+            SPI0DAT = numbers[rate_yaw[1]+(temp)];
+            SPI0DAT = numbers[rate_yaw[2]+(temp)];
+            SPI0DAT = numbers[rate_yaw[3]+(temp)];
+            delay(1);       
+			break;
+        
+        case 126:
+		case 127:
+		case 128:
+		case 129:
+		case 130:
+		case 131:
+		case 132:
+		case 133:
+			temp = line - 126;
+			if (index == 2){
+				delay(60);
+				SPI0DAT = numbers[ 96+(temp)];
+
+			}else{
+				delay(67);
+			}
+            SPI0DAT = letters[0+(temp)];
+            SPI0DAT = letters[_p+(temp)];
+            SPI0DAT = letters[_r+(temp)];
+            SPI0DAT = letters[_o+(temp)];
+            delay(3);
+            SPI0DAT = letters[_f+(temp)];
+            delay(3);
+            SPI0DAT = letters[_i+(temp)];
+            delay(3);
+            SPI0DAT = letters[_l+(temp)];
+            delay(3);
+            SPI0DAT = letters[_e+(temp)];
+            delay(4);
+            SPI0DAT = numbers[ 104+(temp)];
+            delay(55);
+            if(profileAB){
+                SPI0DAT = letters[_b+(temp)];
+            }
+            else
+            {
+                SPI0DAT = letters[_a+(temp)];
+            }
+            delay(1);       
+			break;
+
+		case 141:
+		case 142:
+		case 143:
+		case 144:
+		case 145:
+		case 146:
+		case 147:
+		case 148:
+			temp = line - 141;
+			if (index == 3)
+			{
+					delay(58);
+					SPI0DAT = numbers[ 96+(temp)];
+			}
+			else
+			{
+					delay(65);
+			}
+            SPI0DAT = letters[0+(temp)];
+			SPI0DAT = letters[_b+(temp)];
+            SPI0DAT = letters[_a+(temp)];
+            SPI0DAT = letters[_c+(temp)];
+            delay(3);
+            SPI0DAT = letters[_k+(temp)];    
+		default:
+			break;
+	}
+    
+}
+
+
 
 

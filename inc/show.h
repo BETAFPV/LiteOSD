@@ -19,4 +19,5 @@ void switch_channel(unsigned char index);
 
 void display_window(unsigned short line);
 
+void rates_window(unsigned short line);
 #endif

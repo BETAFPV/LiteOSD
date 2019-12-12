@@ -48,12 +48,19 @@ unsigned char  channel_index = 0;
 unsigned char main_version = 0;
 unsigned char modify_version = 0;
 
+unsigned short rates = 0;
+unsigned short rates_yaw = 0;
+
+unsigned char rate[4] = {0};
+unsigned char rate_yaw[4] = {0};
+unsigned char profileAB = 0;
 
 unsigned short low_bat_l=160;
 unsigned short mode_l=210;
 unsigned short vol_l=220;
 unsigned short curr_l=230;
 unsigned short turtle_l=180;
+
 
 unsigned char low_bat_l_temp[2]={0};
 unsigned char mode_l_temp[2]={0};
@@ -74,6 +81,26 @@ uint8_t OSD_checksum(uint8_t UART_Buffer[])
         sum += UART_Buffer[i];
     }
     return sum;
+}
+
+void rates_window_data()
+{
+    index = UART_Buffer[1];
+    
+    rates = (UART_Buffer[2] << 8) + UART_Buffer[3];
+    rate[0] = (rates/1000) << 3;
+    rate[1] = (rates%1000/100) << 3;
+    rate[2] = (rates%1000%100/10) << 3;
+    rate[3] = (rates%1000%100%10) << 3;
+    
+    rates_yaw = (UART_Buffer[4] << 8) + UART_Buffer[5];
+    rate_yaw[0] = (rates_yaw/1000) << 3;
+    rate_yaw[1] = (rates_yaw%1000/100) << 3;
+    rate_yaw[2] = (rates_yaw%1000%100/10) << 3;
+    rate_yaw[3] = (rates_yaw%1000%100%10) << 3;
+    
+    
+    profileAB = UART_Buffer[6];
 }
 
 void display_window_data()
@@ -275,8 +302,8 @@ void main (void)
    enter_DefaultMode_from_RESET();
 
    IE_EA = 1;
-   delayS(250);
-   delayS(200);
+//   delayS(250);
+//   delayS(200);
    SPI0CKR = (3 << SPI0CKR_SPI0CKR__SHIFT);
     
     
@@ -307,6 +334,9 @@ void main (void)
                 break;
             case 6:
                 display_window_data();
+                break;
+            case 7:
+                rates_window_data();
                 break;
             default:
                 break;
