@@ -171,7 +171,7 @@ void flight_window_data()
         }
     }
 
-    turtle = UART_Buffer[7];
+   // turtle = UART_Buffer[7];
     
 }
  
@@ -225,10 +225,10 @@ void motor_window_data()
 {
     index = UART_Buffer[1];
 
-    m1 = ((UART_Buffer[2]>>0) & 0x01) << 3;
-    m2 = ((UART_Buffer[2]>>1) & 0x01) << 3;
-    m3 = ((UART_Buffer[2]>>2) & 0x01) << 3;
-    m4 = ((UART_Buffer[2]>>3) & 0x01) << 3;
+    m1 = UART_Buffer[2];
+    m2 = UART_Buffer[3]<< 3;
+    m3 = UART_Buffer[4];
+    m4 = UART_Buffer[5];
 }
 
 

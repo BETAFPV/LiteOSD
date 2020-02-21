@@ -295,22 +295,22 @@ void flight_window(unsigned short line)
             delay(2);
         }
     }
-    if(turtle_l<line && line<turtle_l+9)
-    {
-        temp = line - turtle_l;
-        if(turtle && !lock)
-        {
-            delay(120);
-            SPI0DAT = letters[_t+(temp)];
-            SPI0DAT = letters[_u+(temp)];
-            SPI0DAT = letters[_r+(temp)];
-            SPI0DAT = letters[_t+(temp)];
-            SPI0DAT = letters[_l+(temp)];
-            delay(2);
-            SPI0DAT = letters[ _e+(temp)];
-            delay(1);
-        }
-    }
+//    if(turtle_l<line && line<turtle_l+9)
+//    {
+//        temp = line - turtle_l;
+//        if(turtle && !lock)
+//        {
+//            delay(120);
+//            SPI0DAT = letters[_t+(temp)];
+//            SPI0DAT = letters[_u+(temp)];
+//            SPI0DAT = letters[_r+(temp)];
+//            SPI0DAT = letters[_t+(temp)];
+//            SPI0DAT = letters[_l+(temp)];
+//            delay(2);
+//            SPI0DAT = letters[ _e+(temp)];
+//            delay(1);
+//        }
+//    }
 
     if(mode_l<line && line<mode_l+9)
     {
@@ -320,18 +320,15 @@ void flight_window(unsigned short line)
             case 0:
             case 1:
                 delay(13);
-                SPI0DAT =letters[_i+(temp)];
-                SPI0DAT =letters[_n+(temp)];
-                SPI0DAT =letters[_t+(temp)];
-                SPI0DAT =numbers[144+(temp)];
-                SPI0DAT =letters[_s+(temp)];
-                delay(1);
                 SPI0DAT =letters[_b+(temp)];
+                SPI0DAT =letters[_a+(temp)];
+                SPI0DAT =letters[_y+(temp)];
+                SPI0DAT =letters[_a+(temp)];
+                delay(1);
+                SPI0DAT =letters[_n+(temp)];
                 delay(3);
-                SPI0DAT =letters[_u+(temp)];
+                SPI0DAT =letters[_g+(temp)];
                 delay(4);
-                SPI0DAT =letters[_s+(temp)];
-                delay(2);
                 break;
             case 2:
                 delay(15);
@@ -353,7 +350,7 @@ void flight_window(unsigned short line)
         switch (flymode)
         {
             case 0:
-                delay(180);
+                delay(190);
                 SPI0DAT =letters[_l+(temp)];
                 SPI0DAT =letters[_e+(temp)];
                 SPI0DAT =letters[_v+(temp)];
@@ -361,14 +358,14 @@ void flight_window(unsigned short line)
                 SPI0DAT =letters[_l+(temp)];
                 break;
             case 1:
-                delay(180);
+                delay(190);
                 SPI0DAT =letters[_a+(temp)];
                 SPI0DAT =letters[_c+(temp)];
                 SPI0DAT =letters[_r+(temp)];
                 SPI0DAT =letters[_o+(temp)];
                 break;
             case 2:
-                delay(180);
+                delay(190);
                 SPI0DAT =letters[_r+(temp)];
                 SPI0DAT =letters[_a+(temp)];
                 SPI0DAT =letters[_c+(temp)];
@@ -378,7 +375,7 @@ void flight_window(unsigned short line)
                 SPI0DAT =letters[_h+(temp)];
                 break;
             case 3:
-                delay(180);
+                delay(190);
                 SPI0DAT =letters[_r+(temp)];
                 SPI0DAT =letters[_a+(temp)];
                 SPI0DAT =letters[_c+(temp)];
@@ -388,7 +385,7 @@ void flight_window(unsigned short line)
                 SPI0DAT =letters[_a+(temp)];
                 break;
             case 4:
-                delay(180);
+                delay(190);
                 SPI0DAT =letters[_h+(temp)];
                 SPI0DAT =letters[_o+(temp)];
                 SPI0DAT =letters[_r+(temp)];
@@ -454,7 +451,7 @@ void set_window(unsigned short line)
             delay(4);
             SPI0DAT = letters[ _b+(temp)];
             delay(4);
-            SPI0DAT = letters[ _l+(temp)];
+            SPI0DAT = letters[ _h+(temp)];
             delay(4);
             SPI0DAT = letters[ 0+(temp)];
             delay(4);
@@ -526,14 +523,16 @@ void set_window(unsigned short line)
 				delay(67);
 			}
 			SPI0DAT = letters[0+(temp)];
-			SPI0DAT = letters[_m+(temp)];
+			SPI0DAT = letters[_c+(temp)];
 			SPI0DAT = letters[_o+(temp)];
-			SPI0DAT = letters[_t+(temp)];
+			SPI0DAT = letters[_n+(temp)];
             delay(1);
-			SPI0DAT = letters[_o+(temp)];
+			SPI0DAT = letters[_f+(temp)];
             delay(3);
-			SPI0DAT = letters[_r+(temp)];
-			delay(92);
+			SPI0DAT = letters[_i+(temp)];
+            delay(3);
+			SPI0DAT = letters[_g+(temp)];
+			delay(90);
 			SPI0DAT = numbers[ 96+(temp)];
 			break;
 
@@ -1067,12 +1066,15 @@ void motor_window(unsigned short line)
 				temp = line - 81;
 				delay(60);
 				SPI0DAT = numbers[80+(temp)];
-				SPI0DAT = letters[_m+(temp)];
+				SPI0DAT = letters[_c+(temp)];
 				SPI0DAT = letters[_o+(temp)];
-				SPI0DAT = letters[_t+(temp)];
-				SPI0DAT = letters[_o+(temp)];
-				SPI0DAT = letters[_r+(temp)];
-				delay(1);
+				SPI0DAT = letters[_n+(temp)];
+				SPI0DAT = letters[_f+(temp)];
+                delay(1);
+				SPI0DAT = letters[_i+(temp)];
+                delay(3);
+                SPI0DAT = letters[_g+(temp)];
+				delay(4);
 				SPI0DAT = numbers[80+(temp)];
 		}
 
@@ -1089,17 +1091,21 @@ void motor_window(unsigned short line)
 						delay(79);
 				}
 				SPI0DAT = letters[0+(temp)];
-				SPI0DAT = letters[_m+(temp)];
-				SPI0DAT = numbers[ 8+(temp)];
-				SPI0DAT = letters[ 0+(temp)];
+				SPI0DAT = letters[_t+(temp)];
+				SPI0DAT = letters[ _o+(temp)];
+				SPI0DAT = letters[ _y+(temp)];
 				delay(1);
-				SPI0DAT = letters[ 0+(temp)];
-				delay(1);
-				SPI0DAT = letters[ 0+(temp)];
-				delay(1);
-				SPI0DAT = letters[ 0+(temp)];
-				delay(3);
-				SPI0DAT = letters[ (m1?_n:_r)+(temp)];
+				SPI0DAT = numbers[ 144+(temp)];
+				delay(2);
+				SPI0DAT = letters[ _t+(temp)];
+				delay(4);
+				SPI0DAT = letters[ _x+(temp)];
+                delay(4);
+                SPI0DAT = letters[0+(temp)];
+                SPI0DAT = letters[0+(temp)];
+                delay(4);
+				SPI0DAT = letters[ (m1?_y:_n)+(temp)];
+                delay(4);
 		}
 		if(show_m2line)
 		{
@@ -1115,16 +1121,16 @@ void motor_window(unsigned short line)
 				}
 				SPI0DAT = letters[0+(temp)];
 				SPI0DAT = letters[_m+(temp)];
-				SPI0DAT = numbers[ 16+(temp)];
-				SPI0DAT = letters[ 0+(temp)];
+				SPI0DAT = letters[ _o+(temp)];
+				delay(1);
+				SPI0DAT = letters[ _d+(temp)];
+				delay(1);
+				SPI0DAT = letters[ _e+(temp)];
 				delay(1);
 				SPI0DAT = letters[ 0+(temp)];
-				delay(1);
-				SPI0DAT = letters[ 0+(temp)];
-				delay(1);
-				SPI0DAT = letters[ 0+(temp)];
+                SPI0DAT = letters[ 0+(temp)];
 				delay(3);
-				SPI0DAT = letters[ (m2?_n:_r)+(temp)];
+				SPI0DAT = numbers[ m2+(temp)];
 		}
 
 		if(show_m3line)
@@ -1140,17 +1146,16 @@ void motor_window(unsigned short line)
 						delay(74);
 				}
 				SPI0DAT = letters[0+(temp)];
-				SPI0DAT = letters[_m+(temp)];
-				SPI0DAT = numbers[ 24+(temp)];
-				SPI0DAT = letters[ 0+(temp)];
+				SPI0DAT = letters[_r+(temp)];
+				SPI0DAT = letters[ _g+(temp)];
 				delay(1);
-				SPI0DAT = letters[ 0+(temp)];
+				SPI0DAT = letters[ _b+(temp)];
 				delay(1);
 				SPI0DAT = letters[ 0+(temp)];
 				delay(1);
 				SPI0DAT = letters[ 0+(temp)];
 				delay(3);
-				SPI0DAT = letters[ (m3?_n:_r)+(temp)];
+				SPI0DAT = letters[ (m3?_o:_f)+(temp)];
 		}
 
 		if(show_m4line)
@@ -1166,17 +1171,17 @@ void motor_window(unsigned short line)
 						delay(72);
 				}
 				SPI0DAT = letters[0+(temp)];
-				SPI0DAT = letters[_m+(temp)];
-				SPI0DAT = numbers[ 32+(temp)];
-				SPI0DAT = letters[ 0+(temp)];
+				SPI0DAT = letters[_t+(temp)];
+				SPI0DAT = numbers[ 64+(temp)];
+				delay(1);
+				SPI0DAT = letters[ _s+(temp)];
+				delay(1);
+				SPI0DAT = letters[ _g+(temp)];
 				delay(1);
 				SPI0DAT = letters[ 0+(temp)];
-				delay(1);
-				SPI0DAT = letters[ 0+(temp)];
-				delay(1);
-				SPI0DAT = letters[ 0+(temp)];
+                SPI0DAT = letters[ 0+(temp)];
 				delay(3);
-				SPI0DAT = letters[ (m4?_n:_r)+(temp)];
+				SPI0DAT = letters[ (m4?_y:_n)+(temp)];
 		}
 		if(show_motor_exitline)
 		{
@@ -1793,20 +1798,21 @@ void display_window(unsigned short line)
 			}
 
 			SPI0DAT = letters[0+(temp)];
-			SPI0DAT = letters[_t+(temp)];
-            SPI0DAT = letters[_u+(temp)];
-            SPI0DAT = letters[_r+(temp)];
+			SPI0DAT = letters[_l+(temp)];
+            SPI0DAT = letters[_o+(temp)];
+            SPI0DAT = letters[_w+(temp)];
+            delay(3);
+            SPI0DAT = letters[_b+(temp)];
+            delay(3);
+            SPI0DAT = letters[_a+(temp)];
             delay(3);
             SPI0DAT = letters[_t+(temp)];
             delay(3);
-            SPI0DAT = letters[_l+(temp)];
-            delay(3);
-            SPI0DAT = letters[_e+(temp)];
-            delay(3);
             SPI0DAT = numbers[ 104+(temp)];
             delay(50);
-            SPI0DAT = numbers[turtle_l_temp[0]+(temp)];
-            SPI0DAT = numbers[turtle_l_temp[1]+(temp)];
+            SPI0DAT = numbers[low_battery[0]+(temp)];
+            SPI0DAT =numbers[88+(temp)];
+            SPI0DAT = numbers[low_battery[1]+(temp)];
             delay(1);
 			break;
             
@@ -1829,48 +1835,36 @@ void display_window(unsigned short line)
 					delay(65);
 			}
             SPI0DAT = letters[0+(temp)];
-			SPI0DAT = letters[_l+(temp)];
-            SPI0DAT = letters[_o+(temp)];
-            SPI0DAT = letters[_w+(temp)];
-            delay(3);
-            SPI0DAT = letters[_b+(temp)];
-            delay(3);
-            SPI0DAT = letters[_a+(temp)];
-            delay(3);
-            SPI0DAT = letters[_t+(temp)];
-            delay(3);
-            SPI0DAT = numbers[ 104+(temp)];
-            delay(50);
-            SPI0DAT = numbers[low_battery[0]+(temp)];
-            SPI0DAT =numbers[88+(temp)];
-            SPI0DAT = numbers[low_battery[1]+(temp)];
-            delay(1);
-			break;
-            
-        case 171:
-		case 172:
-		case 173:
-		case 174:
-		case 175:
-		case 176:
-		case 177:
-		case 178:
-			temp = line - 171;
-			if (index == 5)
-			{
-					delay(58);
-					SPI0DAT = numbers[ 96+(temp)];
-			}
-			else
-			{
-					delay(65);
-			}
-            SPI0DAT = letters[0+(temp)];
 			SPI0DAT = letters[_b+(temp)];
             SPI0DAT = letters[_a+(temp)];
             SPI0DAT = letters[_c+(temp)];
             delay(3);
             SPI0DAT = letters[_k+(temp)];
+            
+//        case 171:
+//		case 172:
+//		case 173:
+//		case 174:
+//		case 175:
+//		case 176:
+//		case 177:
+//		case 178:
+//			temp = line - 171;
+//			if (index == 5)
+//			{
+//					delay(58);
+//					SPI0DAT = numbers[ 96+(temp)];
+//			}
+//			else
+//			{
+//					delay(65);
+//			}
+//            SPI0DAT = letters[0+(temp)];
+//			SPI0DAT = letters[_b+(temp)];
+//            SPI0DAT = letters[_a+(temp)];
+//            SPI0DAT = letters[_c+(temp)];
+//            delay(3);
+//            SPI0DAT = letters[_k+(temp)];
             
 		default:
 			break;
