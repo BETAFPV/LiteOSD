@@ -54,8 +54,8 @@ unsigned char rate_yaw[4] = {0};
 unsigned char profileAB = 0;
 
 unsigned short low_bat_l=160;
-unsigned short mode_l=210;
-unsigned short vol_l=220;
+unsigned short mode_l=230;
+unsigned short vol_l=240;
 unsigned short turtle_l=180;
 
 unsigned char low_bat_l_temp[2]={0};
@@ -288,9 +288,8 @@ void main (void)
    enter_DefaultMode_from_RESET();
 
    IE_EA = 1;
-   delayS(250);
    delayS(200);
-   SPI0CKR = (3 << SPI0CKR_SPI0CKR__SHIFT);
+   SPI0CKR = (1 << SPI0CKR_SPI0CKR__SHIFT);
     
     
    while(1)
