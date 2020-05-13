@@ -303,8 +303,8 @@ extern void CLOCK_0_enter_DefaultMode_from_RESET(void) {
 		while(CLKSEL & CLKSEL_DIVRDY__BMASK == CLKSEL_DIVRDY__NOT_READY);
 
 
-		CLKSEL = CLKSEL_CLKSL__HFOSC1 ;
-		CLKSEL = CLKSEL_CLKSL__HFOSC1;
+		CLKSEL = CLKSEL_CLKSL__HFOSC1 |0x07;
+		CLKSEL = CLKSEL_CLKSL__HFOSC1 |0x07;
 		while(CLKSEL & CLKSEL_DIVRDY__BMASK == CLKSEL_DIVRDY__NOT_READY);
 	// [CLKSEL - Clock Select]$
 
@@ -333,7 +333,7 @@ extern void TIMER01_0_enter_DefaultMode_from_RESET(void) {
 	/*
 	// TH1 (Timer 1 High Byte) = 0x96
 	*/
-	TH1 = (0x96 << TH1_TH1__SHIFT);
+	TH1 = (0xB9 << TH1_TH1__SHIFT);
 	// [TH1 - Timer 1 High Byte]$
 
 	// $[TL1 - Timer 1 Low Byte]
@@ -428,7 +428,7 @@ extern void SPI_0_enter_DefaultMode_from_RESET(void) {
 	/*
 	// SPI0CKR (SPI0 Clock Rate) = 0x17
 	*/
-	SPI0CKR = (6 << SPI0CKR_SPI0CKR__SHIFT);
+	SPI0CKR = (4 << SPI0CKR_SPI0CKR__SHIFT);
 	// [SPI0CKR - SPI0 Clock Rate]$
 
 	// $[SPI0CFG - SPI0 Configuration]

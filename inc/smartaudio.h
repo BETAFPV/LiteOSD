@@ -386,7 +386,7 @@
 		}
 
 #define Race_1 { \
-            SPI0DAT = letters[ _e+(temp)]; \
+            SPI0DAT = letters[ _r+(temp)]; \
 			SPI0DAT = numbers[ 8+(temp)]; \
             SPI0DAT = letters[0+(temp)];   \
             SPI0DAT = numbers[ 40+(temp)]; \
@@ -397,7 +397,7 @@
             SPI0DAT = numbers[ 48+(temp)]; \
 		}
 #define Race_2 { \
-            SPI0DAT = letters[ _e+(temp)]; \
+            SPI0DAT = letters[ _r+(temp)]; \
 			SPI0DAT = numbers[ 16+(temp)]; \
             SPI0DAT = letters[0+(temp)];   \
             SPI0DAT = numbers[ 40+(temp)]; \
@@ -408,7 +408,7 @@
             SPI0DAT = numbers[ 40+(temp)]; \
 		}
 #define Race_3 { \
-            SPI0DAT = letters[ _e+(temp)]; \
+            SPI0DAT = letters[ _r+(temp)]; \
 			SPI0DAT = numbers[ 24+(temp)]; \
             SPI0DAT = letters[0+(temp)];   \
             SPI0DAT = numbers[ 40+(temp)]; \
@@ -419,7 +419,7 @@
             SPI0DAT = numbers[ 16+(temp)]; \
 		}
 #define Race_4 { \
-            SPI0DAT = letters[ _e+(temp)]; \
+            SPI0DAT = letters[ _r+(temp)]; \
 			SPI0DAT = numbers[ 32+(temp)]; \
             SPI0DAT = letters[0+(temp)];   \
             SPI0DAT = numbers[ 40+(temp)]; \
@@ -430,7 +430,7 @@
             SPI0DAT = numbers[ 72+(temp)]; \
 		}
 #define Race_5 { \
-            SPI0DAT = letters[ _e+(temp)]; \
+            SPI0DAT = letters[ _r+(temp)]; \
 			SPI0DAT = numbers[ 40+(temp)]; \
             SPI0DAT = letters[0+(temp)];   \
             SPI0DAT = numbers[ 40+(temp)]; \
@@ -441,7 +441,7 @@
             SPI0DAT = numbers[ 48+(temp)]; \
 		}
 #define Race_6 { \
-            SPI0DAT = letters[ _e+(temp)]; \
+            SPI0DAT = letters[ _r+(temp)]; \
 			SPI0DAT = numbers[ 48+(temp)]; \
             SPI0DAT = letters[0+(temp)];   \
             SPI0DAT = numbers[ 40+(temp)]; \
@@ -452,7 +452,7 @@
             SPI0DAT = numbers[ 24+(temp)]; \
 		}
 #define Race_7 { \
-            SPI0DAT = letters[ _e+(temp)]; \
+            SPI0DAT = letters[ _r+(temp)]; \
 			SPI0DAT = numbers[ 56+(temp)]; \
             SPI0DAT = letters[0+(temp)];   \
             SPI0DAT = numbers[ 40+(temp)]; \
@@ -463,7 +463,7 @@
             SPI0DAT = numbers[ 0+(temp)]; \
 		}
 #define Race_8 { \
-            SPI0DAT = letters[ _e+(temp)]; \
+            SPI0DAT = letters[ _r+(temp)]; \
 			SPI0DAT = numbers[ 64+(temp)]; \
             SPI0DAT = letters[0+(temp)];   \
             SPI0DAT = numbers[ 40+(temp)]; \

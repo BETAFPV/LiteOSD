@@ -54,8 +54,8 @@ unsigned char rate_yaw[4] = {0};
 unsigned char profileAB = 0;
 
 unsigned short low_bat_l=160;
-unsigned short mode_l=210;
-unsigned short vol_l=220;
+unsigned short mode_l=230;
+unsigned short vol_l=240;
 unsigned short turtle_l=180;
 
 unsigned char low_bat_l_temp[2]={0};
@@ -277,7 +277,6 @@ void delayS(unsigned char n)
     unsigned int j;
 	for(i=0;i<n;i++)
         for(j=500000;j>0;j--);
-        
 }
 
 //-----------------------------------------------------------------------------
@@ -289,8 +288,7 @@ void main (void)
 
    IE_EA = 1;
    delayS(250);
-   delayS(200);
-   SPI0CKR = (3 << SPI0CKR_SPI0CKR__SHIFT);
+   SPI0CKR = (1 << SPI0CKR_SPI0CKR__SHIFT);
     
     
    while(1)
