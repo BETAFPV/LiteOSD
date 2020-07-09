@@ -58,11 +58,11 @@ unsigned short mode_l=230;
 unsigned short vol_l=240;
 unsigned short turtle_l=180;
 
-unsigned char low_bat_l_temp[2]={0};
-unsigned char mode_l_temp[2]={0};
-unsigned char vol_l_temp[2]={0};
-unsigned char turtle_l_temp[2]={0};
-unsigned char low_battery[2]={24,16};
+unsigned char low_bat_l_temp[2]= {0};
+unsigned char mode_l_temp[2]= {0};
+unsigned char vol_l_temp[2]= {0};
+unsigned char turtle_l_temp[2]= {0};
+unsigned char low_battery[2]= {24,16};
 
 extern unsigned char UART_Buffer[12];
 extern void delay(unsigned char n);
@@ -71,8 +71,7 @@ uint8_t OSD_checksum(uint8_t UART_Buffer[])
 {
     unsigned char i;
     unsigned char sum = 0;
-    for (i = 0; i < 11;i++ )
-    {
+    for (i = 0; i < 11; i++ ) {
         sum += UART_Buffer[i];
     }
     return sum;
@@ -81,41 +80,41 @@ uint8_t OSD_checksum(uint8_t UART_Buffer[])
 void rates_window_data()
 {
     index = UART_Buffer[1];
-    
+
     rates = (UART_Buffer[2] << 8) + UART_Buffer[3];
     rate[0] = (rates/1000) << 3;
     rate[1] = (rates%1000/100) << 3;
     rate[2] = (rates%1000%100/10) << 3;
     rate[3] = (rates%1000%100%10) << 3;
-    
+
     rates_yaw = (UART_Buffer[4] << 8) + UART_Buffer[5];
     rate_yaw[0] = (rates_yaw/1000) << 3;
     rate_yaw[1] = (rates_yaw%1000/100) << 3;
     rate_yaw[2] = (rates_yaw%1000%100/10) << 3;
     rate_yaw[3] = (rates_yaw%1000%100%10) << 3;
-    
-    
+
+
     profileAB = UART_Buffer[6];
 }
 
 void display_window_data()
 {
     index = UART_Buffer[1];
-    
+
     low_bat_l = UART_Buffer[2] * 10;
     mode_l = UART_Buffer[3] *10 ;
     vol_l = UART_Buffer[4] *10 ;
     turtle_l = UART_Buffer[6] * 10;
-    
+
     low_bat_l_temp[0] = (UART_Buffer[2]/10) << 3;
     low_bat_l_temp[1] = (UART_Buffer[2]%10) << 3;
-    
+
     mode_l_temp[0] = (UART_Buffer[3]/10) << 3;
     mode_l_temp[1] = (UART_Buffer[3]%10) << 3;
-    
+
     vol_l_temp[0] = (UART_Buffer[4]/10) << 3;
     vol_l_temp[1] = (UART_Buffer[4]%10) << 3;
-        
+
     turtle_l_temp[0] = (UART_Buffer[6]/10) << 3;
     turtle_l_temp[1] = (UART_Buffer[6]%10) << 3;
 
@@ -125,7 +124,7 @@ void display_window_data()
 
 void flight_window_data()
 {
-	lock = UART_Buffer[1];
+    lock = UART_Buffer[1];
 
     Vol = (UART_Buffer[3] << 8) + UART_Buffer[4];
     VOT_value[0] = (Vol/100) << 3;
@@ -138,46 +137,33 @@ void flight_window_data()
     chn[2] = (UART_Buffer[6] >>1) & 0x1;
     chn[3] = (UART_Buffer[6] >>2) & 0x1;
 
-    if(chn[1])
-    {
-        if(chn[2])
-        {
-            if(chn[3])
-            {
+    if(chn[1]) {
+        if(chn[2]) {
+            if(chn[3]) {
                 flymode = 2;
-            }
-            else
-            {
+            } else {
                 flymode = 3;
             }
-        }
-        else
-        {
-            if(chn[3])
-            {
+        } else {
+            if(chn[3]) {
                 flymode = 4;
-            }
-            else
-            {
+            } else {
                 flymode = 0;
             }
         }
-    }
-    else
-    {
-        if(!chn[2])
-        {
+    } else {
+        if(!chn[2]) {
             flymode = 1;
         }
     }
 
-   // turtle = UART_Buffer[7];
-    
+    // turtle = UART_Buffer[7];
+
 }
- 
+
 void set_window_data()
 {
-	index = UART_Buffer[1];
+    index = UART_Buffer[1];
     main_version = UART_Buffer[2]<<3;
     modify_version = UART_Buffer[3]<<3;
 }
@@ -185,7 +171,7 @@ void set_window_data()
 
 void pid_window_data()
 {
-	index = UART_Buffer[1];
+    index = UART_Buffer[1];
 
 
     kp[0] = (UART_Buffer[2]/100) << 3;
@@ -203,7 +189,7 @@ void pid_window_data()
     ki[2] = (UART_Buffer[5]%100%10) << 3;
     ki[3] = (UART_Buffer[6]/100) << 3;
     ki[4] = (UART_Buffer[6]%100/10) << 3;
-    ki[5] = (UART_Buffer[6]%100%10) << 3; 
+    ki[5] = (UART_Buffer[6]%100%10) << 3;
     ki[6] = (UART_Buffer[7]/100) << 3;
     ki[7] = (UART_Buffer[7]%100/10) << 3;
     ki[8] = (UART_Buffer[7]%100%10) << 3;
@@ -234,35 +220,35 @@ void motor_window_data()
 
 void receiver_window_data()
 {
-	index = UART_Buffer[1];
-	
+    index = UART_Buffer[1];
 
-	rx0[0] = (UART_Buffer[2]/100) << 3;
+
+    rx0[0] = (UART_Buffer[2]/100) << 3;
     rx0[1] = (UART_Buffer[2]%100/10) << 3;
     rx0[2] = (UART_Buffer[2]%100%10) << 3;
 
     rx1[0] = (UART_Buffer[3]/100) << 3;
     rx1[1] = (UART_Buffer[3]%100/10) << 3;
     rx1[2] = (UART_Buffer[3]%100%10) << 3;
-    
+
     rx2[0] = (UART_Buffer[4]/100) << 3;
     rx2[1] = (UART_Buffer[4]%100/10) << 3;
     rx2[2] = (UART_Buffer[4]%100%10) << 3;
-    
+
     rx3[0] = (UART_Buffer[5]/100) << 3;
     rx3[1] = (UART_Buffer[5]%100/10) << 3;
     rx3[2] = (UART_Buffer[5]%100%10) << 3;
-    
-	chn[0] = (UART_Buffer[6] ) &0x1;
-	chn[1] = (UART_Buffer[7] )&0x1;
-	chn[2] = (UART_Buffer[8] )&0x1;
-	chn[3] = (UART_Buffer[9] )&0x1;
+
+    chn[0] = (UART_Buffer[6] ) &0x1;
+    chn[1] = (UART_Buffer[7] )&0x1;
+    chn[2] = (UART_Buffer[8] )&0x1;
+    chn[3] = (UART_Buffer[9] )&0x1;
 }
 
 void sa_window_data()
 {
-	index = UART_Buffer[1];
-    
+    index = UART_Buffer[1];
+
     channel = UART_Buffer[2];
     vtx_power = UART_Buffer[3];
     channel_index = UART_Buffer[5];
@@ -273,10 +259,11 @@ void sa_window_data()
 
 void delayS(unsigned char n)
 {
-	unsigned char i;
+    unsigned char i;
     unsigned int j;
-	for(i=0;i<n;i++)
-        for(j=500000;j>0;j--);
+    for(i=0; i<n; i++)
+        for(j=500000; j>0; j--)
+            ;
 }
 
 //-----------------------------------------------------------------------------
@@ -284,20 +271,17 @@ void delayS(unsigned char n)
 //-----------------------------------------------------------------------------
 void main (void)
 {
-   enter_DefaultMode_from_RESET();
+    enter_DefaultMode_from_RESET();
 
-   IE_EA = 1;
-   delayS(250);
-   SPI0CKR = (1 << SPI0CKR_SPI0CKR__SHIFT);
-    
-    
-   while(1)
-   {
-     if(UART_Buffer[11] == OSD_checksum(UART_Buffer))
-     {
-        showcase = (UART_Buffer[0]>>4) & 0x0f;
-        switch (showcase)
-        {
+    IE_EA = 1;
+    delayS(250);
+    SPI0CKR = (1 << SPI0CKR_SPI0CKR__SHIFT);
+
+
+    while(1) {
+        if(UART_Buffer[11] == OSD_checksum(UART_Buffer)) {
+            showcase = (UART_Buffer[0]>>4) & 0x0f;
+            switch (showcase) {
             case 0:
                 flight_window_data();
                 break;
@@ -322,9 +306,10 @@ void main (void)
             case 7:
                 rates_window_data();
                 break;
-            default:
+            default
+                    :
                 break;
+            }
         }
-     }
-   }
+    }
 }
