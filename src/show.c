@@ -344,6 +344,14 @@ void flight_window(unsigned short line)
                 SPI0DAT =letters[_x+(temp)];
                 delay(2);
                 break;
+            case 5:
+                delay(5);
+                SPI0DAT =letters[_i+(temp)];
+                SPI0DAT =letters[_b+(temp)];
+                SPI0DAT =letters[_u+(temp)];
+                SPI0DAT =letters[_s+(temp)];
+                delay(2);
+                break;		
         }
         switch (flymode)
         {
