@@ -344,7 +344,7 @@ void flight_window(unsigned short line)
                 SPI0DAT =letters[_x+(temp)];
                 delay(2);
                 break;
-            case 4:
+            case 5:
                 delay(5);
                 SPI0DAT =letters[_i+(temp)];
                 SPI0DAT =letters[_b+(temp)];
