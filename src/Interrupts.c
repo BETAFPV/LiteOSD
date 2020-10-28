@@ -10,7 +10,7 @@ unsigned char  flag = 0;
 unsigned short  rising_count=0;
 unsigned char  minute=0;
 unsigned char  second=0;
-unsigned char UART_Buffer[12] = {0};
+unsigned char UART_Buffer[13] = {0};
 unsigned char UART_Buffer_Size = 0;
 unsigned short  line = 0;
 
@@ -116,11 +116,11 @@ SI_INTERRUPT (UART0_ISR, UART0_IRQn)
         if(UART_Buffer_Size==0 && (byte & 0x0f) == 0X0F) {
             UART_Buffer[UART_Buffer_Size] = byte;
             UART_Buffer_Size ++;
-        } else if (UART_Buffer_Size >0 && UART_Buffer_Size <12) {
+        } else if (UART_Buffer_Size >0 && UART_Buffer_Size <13) {
             UART_Buffer[UART_Buffer_Size] = byte;
             UART_Buffer_Size ++;
         }
-        if(UART_Buffer_Size == 12) {
+        if(UART_Buffer_Size == 13) {
             UART_Buffer_Size = 0;
         }
     }

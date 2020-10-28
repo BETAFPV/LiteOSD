@@ -9,6 +9,21 @@
 *.uvgui.*
 *.uvguix.*
 
+obj
+build/
+*.TMP
+project/*.txt
+project/*.ini
+project/*.bak
+project/DebugConfig/
+project/*.scvd
+project/*.Administrator
+project/*.uvoptx
+project/*.dep
+project/RTE/*
+project/Objects/*
+project/Listings/*
+
 # Listing files
 *.cod
 *.htm
@@ -44,6 +59,7 @@
 # Generated output files
 /Listings/*
 /Objects/*
+/RTE/*
 
 # Debugger files
 # define exception below if needed
@@ -66,6 +82,7 @@
 *.sct
 *.sfd
 *.sfr
+*.orig
 
 # Miscellaneous
 *.tra
