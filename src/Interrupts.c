@@ -66,30 +66,24 @@ SI_INTERRUPT (INT0_ISR, INT0_IRQn)
         case 0:
             flight_window(line);
             break;
+
         case 1:
             set_window(line);
             break;
+
         case 2:
-            pid_window(line);
+            config_window(line);
             break;
+
         case 3:
-            motor_window(line);
+            layout_window(line);
             break;
+
         case 4:
-            receiver_window(line);
+            vtx_window(line);
             break;
-        case 5:
-            sa_window(line);
-            break;
-        case 6:
-            display_window(line);
-            break;
-        case 7:
-            rates_window(line);
-            break;
-        default
-                :
-            init_window(line);
+
+        default:
             break;
         }
         SPI0DAT = 0x00;
@@ -122,11 +116,10 @@ SI_INTERRUPT (UART0_ISR, UART0_IRQn)
         if(UART_Buffer_Size==0 && (byte & 0x0f) == 0X0F) {
             UART_Buffer[UART_Buffer_Size] = byte;
             UART_Buffer_Size ++;
-        } else
-            if (UART_Buffer_Size >0 && UART_Buffer_Size <12) {
-                UART_Buffer[UART_Buffer_Size] = byte;
-                UART_Buffer_Size ++;
-            }
+        } else if (UART_Buffer_Size >0 && UART_Buffer_Size <12) {
+            UART_Buffer[UART_Buffer_Size] = byte;
+            UART_Buffer_Size ++;
+        }
         if(UART_Buffer_Size == 12) {
             UART_Buffer_Size = 0;
         }
