@@ -10,7 +10,6 @@ unsigned char  lock = 0;
 unsigned char   chn[4] = {0};
 unsigned char  mode = 0;
 unsigned char failsafe=1;
-unsigned char turtlemode = 0;
 unsigned char  flymode = 0;
 unsigned short V;
 unsigned char  VOT_value[3] = {0};
@@ -62,22 +61,21 @@ uint8_t OSD_checksum(uint8_t UART_Buffer[])
 
 void flight_window_data(void)
 {
-    chn[0] = ((UART_Buffer[1] >>0) & 0x3)? 10 : 0;
+    chn[0] = ((UART_Buffer[1] >>0) & 0x3)? 40 : 0;
     lock  = chn[0];
-    chn[1] = ((UART_Buffer[1] >>2) & 0x3)? 12 : 0;
-    chn[2] = ((UART_Buffer[1] >>4) & 0x3)? 14 : 0;
-    chn[3] = ((UART_Buffer[1] >>6) & 0x3)? 16 : 0;
+    chn[1] = ((UART_Buffer[1] >>2) & 0x3)? 48 : 0;
+    chn[2] = ((UART_Buffer[1] >>4) & 0x3)? 56 : 0;
+    chn[3] = ((UART_Buffer[1] >>6) & 0x3)? 64 : 0;
 
 
     mode = UART_Buffer[2] & 0x01;
     failsafe = (UART_Buffer[2]>>1)&0x01;
-    turtlemode = (UART_Buffer[2]>>2)&0x01;
     flymode = (UART_Buffer[2] >>4) & 0x0f;
 
     V = (UART_Buffer[3] << 8) + UART_Buffer[4];
-    VOT_value[0] = (V/100)<< 1;
-    VOT_value[1] = (V%100/10)<< 1;
-    VOT_value[2] = (V%100%10)<< 1;
+    VOT_value[0] = (V/100)<< 3;
+    VOT_value[1] = (V%100/10)<< 3;
+    VOT_value[2] = (V%100%10)<< 3;
 
     low_vol = UART_Buffer[5] &0x0f;
     rx_index = (UART_Buffer[5]>>4)&0x0f;
@@ -93,21 +91,21 @@ void flight_window_data(void)
         ochn[2] = (UART_Buffer[6] >>6) & 0x1;
 
 
-        rx0[0] = (UART_Buffer[7]/100)<< 1;
-        rx0[1] = (UART_Buffer[7]%100/10)<< 1;
-        rx0[2] = (UART_Buffer[7]%100%10) << 1;
+        rx0[0] = (UART_Buffer[7]/100)<< 3;
+        rx0[1] = (UART_Buffer[7]%100/10)<< 3;
+        rx0[2] = (UART_Buffer[7]%100%10) << 3;
 
-        rx1[0] = (UART_Buffer[8]/100) << 1;
-        rx1[1] = (UART_Buffer[8]%100/10) << 1;
-        rx1[2] = (UART_Buffer[8]%100%10) << 1;
+        rx1[0] = (UART_Buffer[8]/100) << 3;
+        rx1[1] = (UART_Buffer[8]%100/10) << 3;
+        rx1[2] = (UART_Buffer[8]%100%10) << 3;
 
-        rx2[0] = (UART_Buffer[9]/100)<< 1;
-        rx2[1] = (UART_Buffer[9]%100/10) << 1;
-        rx2[2] = (UART_Buffer[9]%100%10) << 1;
+        rx2[0] = (UART_Buffer[9]/100)<< 3;
+        rx2[1] = (UART_Buffer[9]%100/10) << 3;
+        rx2[2] = (UART_Buffer[9]%100%10) << 3;
 
-        rx3[0] = (UART_Buffer[10]/100) << 1;
-        rx3[1] = (UART_Buffer[10]%100/10) << 1;
-        rx3[2] = (UART_Buffer[10]%100%10) << 1;
+        rx3[0] = (UART_Buffer[10]/100) << 3;
+        rx3[1] = (UART_Buffer[10]%100/10) << 3;
+        rx3[2] = (UART_Buffer[10]%100%10) << 3;
     }
 }
 
@@ -124,16 +122,16 @@ void config_window_data(void)
 
     mode = UART_Buffer[2];
     rates = (UART_Buffer[3] << 8) + UART_Buffer[4];
-    rate[0] = (rates/1000)<< 1;
-    rate[1] = (rates%1000/100) << 1;
-    rate[2] = (rates%1000%100/10) << 1;
-    rate[3] = (rates%1000%100%10) << 1;
+    rate[0] = (rates/1000)<< 3;
+    rate[1] = (rates%1000/100) << 3;
+    rate[2] = (rates%1000%100/10) << 3;
+    rate[3] = (rates%1000%100%10) << 3;
 
     rates_yaw = (UART_Buffer[5] << 8) + UART_Buffer[6];
-    rate_yaw[0] = (rates_yaw/1000) << 1;
-    rate_yaw[1] = (rates_yaw%1000/100) << 1;
-    rate_yaw[2] = (rates_yaw%1000%100/10) << 1;
-    rate_yaw[3] = (rates_yaw%1000%100%10) << 1;
+    rate_yaw[0] = (rates_yaw/1000) << 3;
+    rate_yaw[1] = (rates_yaw%1000/100) << 3;
+    rate_yaw[2] = (rates_yaw%1000%100/10) << 3;
+    rate_yaw[3] = (rates_yaw%1000%100%10) << 3;
 
     acc_cali = UART_Buffer[7];
 
@@ -160,18 +158,9 @@ void vtx_window_data(void)
 {
     cur_index = UART_Buffer[1];
 
-    chn[0] = (UART_Buffer[2] )<< 1;
-    chn[1] = (UART_Buffer[3] )<< 1;
-    chn[2] = (UART_Buffer[4] )<< 1;
-    chn[3] = (UART_Buffer[5] )<< 1;
 
-    ochn[0] = (UART_Buffer[6] )<< 1;
-    ochn[1] = (UART_Buffer[7] )<< 1;
-    ochn[2] = (UART_Buffer[8] )<< 1;
-    ochn[3] = (UART_Buffer[9] )<< 1;
-
-    band_index = UART_Buffer[10];
-    vtx_index = UART_Buffer[11]<<1;
+    band_index = UART_Buffer[2];
+    vtx_index = UART_Buffer[3];
 
 }
 

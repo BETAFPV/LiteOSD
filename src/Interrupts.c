@@ -37,7 +37,7 @@ SI_INTERRUPT (INT0_ISR, INT0_IRQn)
         TH0 = 0x00;
         TL0 = 0x00;
         IT01CF = IT01CF_IN0PL__ACTIVE_LOW | IT01CF_IN0SL__P0_2;
-        if(lock == 1 && showcase == 0) {
+        if(lock  && showcase == 0) {
             rising_count++;
         }
 
